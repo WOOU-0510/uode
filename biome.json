@@ -28,13 +28,7 @@
       },
       "suspicious": {
         "noEmptyInterface": "off",
-        "noDuplicateProperties": "off",
-        "noUnknownAtRules": {
-          "level": "error",
-          "options": {
-            "ignore": ["stylex"]
-          }
-        }
+        "noDuplicateProperties": "off"
       }
     },
     "domains": {

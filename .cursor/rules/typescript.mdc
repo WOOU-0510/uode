@@ -1,0 +1,65 @@
+---
+alwaysApply: true
+---
+
+# TypeScript 규칙
+
+## 타입 안전성
+
+- `any` 타입 사용 금지 - `unknown` 타입 사용 후 타입 가드로 안전하게 처리
+- 타입 단언(`as`, `<>`) 금지 - 타입 가드, 제네릭, 타입 추론 활용
+- 모든 컴포넌트는 props destructuring 사용 (빈 props라도)
+- 모델 정의 타입을 import하여 사용 (타입 단언 대신)
+
+## 권장 패턴
+
+- 타입 가드: `typeof`, `instanceof`, 사용자 정의 타입 가드
+- 제네릭: 함수와 클래스에서 타입 매개변수 활용
+- 타입 추론: TypeScript의 자동 타입 추론 기능 활용
+- 유니온 타입: 여러 가능한 타입을 명시적으로 정의
+
+## 타입 정의 예시
+
+```typescript
+// ✅ 좋은 예
+type FormType = {
+  id: string;
+  title: LocaleFieldType<string>;
+  option: 규격기본옵션 | 후가공 | 추가물품;
+};
+
+type StandardFormProps = {
+  locale: string;
+  idx: number;
+  materialIdx: number;
+  inkIdx: number;
+};
+```
+
+## 금지사항
+
+- `any` 타입 사용
+- 타입 단언 (`as`, `<>`)
+- `require` 사용 (ES6 import 사용)
+
+## 예시
+
+❌ 금지:
+
+```typescript
+const data: any = getData();
+const value = data as string;
+const number = <number>data;
+```
+
+✅ 권장:
+
+```typescript
+function getData<T>(): T {
+  /* ... */
+}
+if (typeof data === "string") {
+  /* ... */
+}
+const value = data; // 타입 추론 활용
+```

@@ -1,0 +1,60 @@
+ .titlebar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 40px;
+  display: flex;
+  align-items: stretch;
+  background: rgba(16, 20, 28, 0.85);
+  color: #e7eaf0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  user-select: none;
+  z-index: 1000;
+}
+
+.drag {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.title {
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  opacity: 0.9;
+}
+
+.actions {
+  display: flex;
+  align-items: stretch;
+}
+
+.btn {
+  width: 46px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.btnClose {
+  &:hover {
+    background: #e81123;
+    color: #ffffff;
+  }
+}
+

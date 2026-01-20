@@ -70,4 +70,4 @@ yarn-error.log*
 next-env.d.ts
 
 # agents
-.cursor
+# .cursor
