@@ -1,3 +1,4 @@
+mod lab;
 mod notes;
 mod reports;
 mod shared;
@@ -6,8 +7,13 @@ mod shared;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        // 첫 `#[tauri::command]` 추가 시:
-        // .invoke_handler(tauri::generate_handler![ notes::commands::foo, ])
+        .invoke_handler(tauri::generate_handler![
+            lab::commands::greet,
+            lab::commands::get_app_metadata,
+            lab::commands::add,
+            lab::commands::echo,
+            lab::commands::ping,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
