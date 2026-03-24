@@ -71,3 +71,5 @@ next-env.d.ts
 
 # agents
 # .cursor
+# next-agents-md
+.next-docs/

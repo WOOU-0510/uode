@@ -16,6 +16,18 @@ const nextConfig = {
   // 참고: https://nextjs.org/docs/app/api-reference/config/next-config-js/reactCompiler
   reactCompiler: true,
   typedRoutes: true,
+  logging: {
+    browserToTerminal: true,
+    // 'error' — errors only (default)
+    // 'warn'  — warnings and errors
+    // true    — all console output
+    // false   — disabled
+  },
+  experimental: {
+    useLightningcss: true, // default, ignored on Turbopack
+    viewTransitions: true,
+  },
+  devIndicators: false,
 };
 
 export default nextConfig;
