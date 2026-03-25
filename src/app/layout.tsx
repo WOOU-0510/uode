@@ -1,32 +1,19 @@
-import { TitleBar } from "@/widgets/shell";
+import { geistMono, geistSans } from "@/shared/assets/fonts";
 import cn from "classnames";
-import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
-import "./globals.scss";
+import "@/shared/styles/globals.scss";
 
 type RootLayoutProps = {
   children: ReactNode;
 };
-
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
 
 const RootLayout = (props: RootLayoutProps) => {
   const { children } = props;
 
   return (
     <html lang="ko" className={cn(geistSans.className, geistMono.className)}>
-      <body>
-        <TitleBar />
-        {children}
-      </body>
+      <head></head>
+      <body>{children}</body>
     </html>
   );
 };
