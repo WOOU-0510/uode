@@ -45,7 +45,7 @@ jobs:
           "RELEASE_NAME=$($parts[1])" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Build and publish with tauri-action
-        uses: tauri-apps/tauri-action@v1
+        uses: tauri-apps/tauri-action@v0.6.2
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
         with:
