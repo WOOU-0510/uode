@@ -58,7 +58,8 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
           releaseBody: "Automated release for ${{ github.ref_name }}"
-          releaseCommitish: ${{ github.sha }}
+          # 릴리즈 대상이 다른 repo(u-modules/uode)일 때는 소스 repo의 github.sha를 쓰면 안 됨(해당 SHA가 대상 repo에 없음).
+          releaseCommitish: main
           releaseDraft: false
           prerelease: ${{ contains(github.ref_name, '-beta.') }}
           includeUpdaterJson: true

@@ -57,6 +57,12 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 
 워크플로우는 `tauri-action`으로 번들/릴리즈 업로드를 수행하며, updater JSON 업로드를 활성화합니다.
 
+### 소스 repo와 릴리즈 repo가 다를 때
+
+GitHub Release는 **릴리즈를 올리는 저장소**에 존재하는 커밋/브랜치만 `target_commitish`로 쓸 수 있습니다.  
+소스(private)에서 빌드한 커밋 SHA(`github.sha`)는 public 릴리즈 repo에 없을 수 있으므로, 워크플로우에서는 `releaseCommitish`를 **릴리즈 repo의 기본 브랜치**(예: `main`)로 두는 방식을 사용합니다.  
+(태그 이름과 업로드 자산은 CI 빌드 결과를 그대로 씁니다.)
+
 - stable 태그(`vX.Y.Z`) → `latest.json`
 - beta 태그(`vX.Y.Z-beta.N`) → `latest-beta.json`
 
