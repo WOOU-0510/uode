@@ -6,7 +6,7 @@
 
 - 소스 저장소: private
 - 업데이트 아티팩트 저장소: public GitHub Releases (별도 repo)
-- 배포 자동화: GitHub Actions (`.github/workflows/tauri-release.yml`)
+- 배포 자동화: GitHub Actions + `tauri-apps/tauri-action`
 - 릴리즈 트리거: `v*` 태그 푸시
 - 채널: stable / beta
   - stable 태그 예: `v0.2.0`
@@ -55,7 +55,7 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 
 ## 4) 릴리즈 방식
 
-워크플로우는 NSIS 설치 파일 기준으로 updater JSON을 생성합니다.
+워크플로우는 `tauri-action`으로 번들/릴리즈 업로드를 수행하며, updater JSON 업로드를 활성화합니다.
 
 - stable 태그(`vX.Y.Z`) → `latest.json`
 - beta 태그(`vX.Y.Z-beta.N`) → `latest-beta.json`
@@ -81,4 +81,15 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 
 현재 앱 기본 endpoint는 `latest.json`(stable)입니다.  
 `latest-beta.json`은 배포 파이프라인에서 생성/업로드되며, beta 채널을 앱에서 직접 사용하려면 endpoint를 beta용으로 분기하는 추가 런타임 구현이 필요합니다.
+
+## 7) 자동 업데이트 반영 조건
+
+- 프론트 코드 수정 후 **커밋/푸시만으로는 배포가 실행되지 않습니다.**
+- 이 저장소의 릴리즈 파이프라인은 `v*` 태그 푸시에서만 실행됩니다.
+  - 예: `v0.1.2`, `v0.1.2-beta.1`
+- 즉, 자동 업데이트 확인은 다음 순서가 필요합니다.
+  1. 코드 변경 커밋/푸시
+  2. 새 버전 태그 생성/푸시
+  3. Actions 성공 확인
+  4. 설치된 앱에서 업데이트 체크/설치
 

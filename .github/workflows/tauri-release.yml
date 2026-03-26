@@ -6,7 +6,9 @@ on:
       - "v*"
 
 jobs:
-  release:
+  release-tauri:
+    permissions:
+      contents: read
     runs-on: windows-latest
     env:
       RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
@@ -29,67 +31,34 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install frontend deps
-        run: bun install --frozen-lockfile
-
-      - name: Build Tauri bundles
-        run: bun run tauri build
-
-      - name: Prepare updater assets
-        shell: pwsh
-        run: |
-          $tag = "${{ github.ref_name }}"
-          $version = $tag
-          if ($version.StartsWith("v")) { $version = $version.Substring(1) }
-          $isBeta = $version.Contains("-beta.")
-          $jsonName = if ($isBeta) { "latest-beta.json" } else { "latest.json" }
-
-          $nsisExe = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis" -Filter "*.exe" | Select-Object -First 1
-          if ($null -eq $nsisExe) { throw "NSIS installer not found." }
-          $sigPath = "$($nsisExe.FullName).sig"
-          if (!(Test-Path $sigPath)) { throw "Signature file not found: $sigPath" }
-
-          $sig = (Get-Content -Raw -Path $sigPath).Trim()
-          $assetName = $nsisExe.Name
-          $assetUrl = "https://github.com/$env:RELEASE_REPO/releases/download/$tag/$assetName"
-          $pubDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
-
-          $latestJson = @{
-            version = $version
-            notes = "Automated release from tag $tag"
-            pub_date = $pubDate
-            platforms = @{
-              "windows-x86_64" = @{
-                signature = $sig
-                url = $assetUrl
-              }
-            }
-          } | ConvertTo-Json -Depth 10
-
-          Copy-Item -Path $nsisExe.FullName -Destination "release-installer.exe"
-          Copy-Item -Path $sigPath -Destination "release-installer.exe.sig"
-          Set-Content -Path $jsonName -Value $latestJson -NoNewline
-          "JSON_NAME=$jsonName" | Out-File -FilePath $env:GITHUB_ENV -Append
-
-      - name: Create release in public repo
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
+      - name: Parse release repository
         shell: pwsh
         run: |
           if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPO)) {
             throw "RELEASE_REPO secret is missing (expected: owner/repo)."
           }
-          $tag = "${{ github.ref_name }}"
-          gh release view $tag --repo $env:RELEASE_REPO *> $null
-          if ($LASTEXITCODE -ne 0) {
-            gh release create $tag --repo $env:RELEASE_REPO --title $tag --notes "Automated release for $tag"
+          $parts = $env:RELEASE_REPO.Split("/")
+          if ($parts.Length -ne 2) {
+            throw "RELEASE_REPO must be in owner/repo format."
           }
+          "RELEASE_OWNER=$($parts[0])" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "RELEASE_NAME=$($parts[1])" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Upload release assets
+      - name: Build and publish with tauri-action
+        uses: tauri-apps/tauri-action@v1
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
-        shell: pwsh
-        run: |
-          $tag = "${{ github.ref_name }}"
-          gh release upload $tag "release-installer.exe" "release-installer.exe.sig" "$env:JSON_NAME" --clobber --repo $env:RELEASE_REPO
+          GITHUB_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
+        with:
+          owner: ${{ env.RELEASE_OWNER }}
+          repo: ${{ env.RELEASE_NAME }}
+          tauriScript: bun run tauri
+          tagName: ${{ github.ref_name }}
+          releaseName: ${{ github.ref_name }}
+          releaseBody: "Automated release for ${{ github.ref_name }}"
+          releaseCommitish: ${{ github.sha }}
+          releaseDraft: false
+          prerelease: ${{ contains(github.ref_name, '-beta.') }}
+          uploadUpdaterJson: true
+          updaterJsonPreferNsis: true
+          releaseAssetNamePattern: "uode-[version]-installer-[platform][ext]"
 
