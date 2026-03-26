@@ -1,0 +1,90 @@
+name: Tauri Release (Auto Update)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend deps
+        run: npm install
+
+      - name: Build Tauri bundles
+        run: npm run tauri build
+
+      - name: Prepare updater assets
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = $tag
+          if ($version.StartsWith("v")) { $version = $version.Substring(1) }
+          $isBeta = $version.Contains("-beta.")
+          $jsonName = if ($isBeta) { "latest-beta.json" } else { "latest.json" }
+
+          $nsisExe = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis" -Filter "*.exe" | Select-Object -First 1
+          if ($null -eq $nsisExe) { throw "NSIS installer not found." }
+          $sigPath = "$($nsisExe.FullName).sig"
+          if (!(Test-Path $sigPath)) { throw "Signature file not found: $sigPath" }
+
+          $sig = (Get-Content -Raw -Path $sigPath).Trim()
+          $assetName = $nsisExe.Name
+          $assetUrl = "https://github.com/$env:RELEASE_REPO/releases/download/$tag/$assetName"
+          $pubDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+
+          $latestJson = @{
+            version = $version
+            notes = "Automated release from tag $tag"
+            pub_date = $pubDate
+            platforms = @{
+              "windows-x86_64" = @{
+                signature = $sig
+                url = $assetUrl
+              }
+            }
+          } | ConvertTo-Json -Depth 10
+
+          Copy-Item -Path $nsisExe.FullName -Destination "release-installer.exe"
+          Copy-Item -Path $sigPath -Destination "release-installer.exe.sig"
+          Set-Content -Path $jsonName -Value $latestJson -NoNewline
+          "JSON_NAME=$jsonName" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Create release in public repo
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPO)) {
+            throw "RELEASE_REPO secret is missing (expected: owner/repo)."
+          }
+          $tag = "${{ github.ref_name }}"
+          gh release view $tag --repo $env:RELEASE_REPO *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --repo $env:RELEASE_REPO --title $tag --notes "Automated release for $tag"
+          }
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          gh release upload $tag "release-installer.exe" "release-installer.exe.sig" "$env:JSON_NAME" --clobber --repo $env:RELEASE_REPO
+

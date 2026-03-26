@@ -25,6 +25,7 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": "all",
     "icon": [
       "icons/32x32.png",
@@ -33,5 +34,16 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ5Qzg2N0RDQjFBM0NEQUEKUldTcXphT3gzR2ZJMlh4MWxsNVRlbklsYnJ5SWhrcEw5eTBRZ2JuY2JTeEtUMjVmRFNWaDA5OFkK",
+      "endpoints": [
+        "https://github.com/u-modules/uode/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

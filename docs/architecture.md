@@ -118,3 +118,7 @@ Playground는 두 가지 방향이 모두 가능하다.
 - 커밋 메시지는 **한국어**로 작성한다.
 - 자세한 가이드는 `docs/commit-message-guide.md` 참고.
 
+## 배포/업데이트 운영 문서
+
+- Tauri 자동 업데이트 배포 가이드: `docs/tauri-auto-update.md`
+
