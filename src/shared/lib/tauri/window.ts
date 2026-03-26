@@ -28,7 +28,7 @@ async function getAppWindow(): Promise<TauriWindow> {
 }
 
 async function withCurrentWindow(
-  action: (appWindow: TauriWindow) => Promise<void>
+  action: (appWindow: TauriWindow) => Promise<void>,
 ): Promise<void> {
   if (!isTauriRuntime()) return;
   await action(await getAppWindow());

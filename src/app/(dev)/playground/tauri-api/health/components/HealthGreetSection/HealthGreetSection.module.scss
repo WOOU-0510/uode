@@ -1,0 +1,32 @@
+  .section {
+    margin-top: 1.5rem;
+  }
+
+  .section h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .section p {
+    margin: 0 0 0.75rem;
+    color: var(--playground-muted);
+    line-height: 1.5;
+    font-size: 0.9rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .row input[type="text"] {
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--playground-border);
+    background: #0c0e12;
+    color: var(--playground-fg);
+    font-size: 0.875rem;
+  }

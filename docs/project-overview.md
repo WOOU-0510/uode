@@ -6,7 +6,7 @@
 
 - **UI**: Next.js (App Router), React, SCSS 모듈, FSD 지향 구조
 - **데스크톱 셸**: Tauri 2 (Rust 백엔드 + WebView)
-- **개발·학습용**: Next 라우트 **`/preview`** — `invoke`·컴포넌트 실험 (본 제품 기능과 무관). Rust는 **`src-tauri/src/lab/`** 만 사용.
+- **개발·학습용**: Next 라우트 **`/playground`** — `invoke`·컴포넌트 실험 (본 제품 기능과 무관). Rust는 **`src-tauri/src/lab/`** 만 사용.
 
 ## 기능 방향 (기획 수준)
 
@@ -33,10 +33,14 @@
 | `notes/` | 메모·vault·md·(그래프) |
 | `reports/` | 깃허브 커밋 + 올라마 보고 |
 | `shared/` | 공용 경로·에러·HTTP 등 |
-| `lab/` | **학습·프리뷰 전용** IPC (`/preview`에서만 사용 예정) |
+| `lab/` | **학습·플레이그라운드 전용** IPC (`/playground`에서만 사용 예정) |
 
 프론트에서 도메인 기능을 붙일 때: 해당 도메인의 `commands.rs`에 `#[tauri::command]`를 두고, `lib.rs`의 `generate_handler!`에 등록한다.
 
 ## 이 문서의 목적
 
 기획이 아직 유동적일 때도 **방향과 폴더 역할**을 한곳에 적어 두기 위함. 제품 스펙 문서가 아니라 **개발자(본인)용 메모**에 가깝다.
+
+## 관련 문서
+
+- 개발 규칙/구조 기준: `docs/architecture.md`

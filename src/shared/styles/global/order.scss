@@ -1,0 +1,9 @@
+// 글로벌·공용(리셋·벤더·베이스)과, 추후 `shared/lib` UI-kit 등 **자산·토대** 스타일만
+// `@layer`로 묶는다. 이 파일은 그 레이어들의 **선언 순서**만 정한다.
+//
+// `app` / `widgets` / `features` / `entities` 등 **최종 구현부**의 CSS 모듈에는
+// `@layer`를 두지 않는다(모듈 스코프만으로 충분).
+//
+// UI-kit을 도입할 때는 예: `@layer uikit` 또는 `@layer uikit.button`처럼
+// 네임스페이스형 하위 레이어를 쓰고, 아래 목록 끝에 그 이름을 이 순서에 맞게 추가한다.
+@layer reset, vendor, base;

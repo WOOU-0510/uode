@@ -1,5 +1,4 @@
-@layer reset, vendor, base;
-
-@import "./reset.scss";
-@import "./base.scss";
-@import "./vendor.scss";
+@use "./global/order.scss";
+@use "./global/reset.scss";
+@use "./global/base.scss";
+@use "./global/vendor.scss";

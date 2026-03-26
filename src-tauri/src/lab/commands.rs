@@ -1,4 +1,4 @@
-//! `/preview`용 샘플 커맨드. 프로덕션 기능에 넣지 않는다.
+//! `/playground`용 샘플 커맨드. 프로덕션 기능에 넣지 않는다.
 
 use serde::{Deserialize, Serialize};
 

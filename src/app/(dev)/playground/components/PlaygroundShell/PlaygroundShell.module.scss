@@ -1,0 +1,36 @@
+  .shell {
+    --playground-bg: #0f1115;
+    --playground-fg: #e8eaef;
+    --playground-border: #2a2f3a;
+    --playground-muted: #8b929e;
+    --playground-hover: #1c212b;
+    --playground-accent: #6b9eff;
+    --playground-accent-muted: #3d4f6f;
+    --playground-active-bg: #1e2633;
+    --playground-active-border: #334155;
+    --playground-sidebar: #12151c;
+    --playground-card: #161a22;
+    --playground-card-hover: #1a1f29;
+
+    display: flex;
+    min-height: 100dvh;
+    background: var(--playground-bg);
+    color: var(--playground-fg);
+  }
+
+  .sidebar {
+    flex: 0 0 15.5rem;
+    border-right: 1px solid var(--playground-border);
+    padding: 1.25rem 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--playground-sidebar);
+  }
+
+  .content {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+    padding: 1.75rem 1.75rem 2.5rem;
+  }

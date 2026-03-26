@@ -25,7 +25,7 @@ const nextConfig = {
   },
   experimental: {
     useLightningcss: true, // default, ignored on Turbopack
-    viewTransitions: true,
+    viewTransition: true,
   },
   devIndicators: false,
 };

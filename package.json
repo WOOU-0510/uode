@@ -7,17 +7,21 @@
     "build": "next build",
     "start": "next start -p 1420",
     "tauri": "tauri",
+    "t:g": "next typegen",
     "lint": "biome check --write",
     "lint:fix": "biome check --write --fix",
     "format": "biome format --write",
-    "format:fix": "biome format --write --fix"
+    "format:fix": "biome format --write --fix",
+    "ic:g": "bun run ./scripts/svgr-generate-icons.ts"
   },
   "dependencies": {
     "@tanstack/react-form": "^1.28.5",
     "@tanstack/react-form-nextjs": "^1.28.5",
+    "@tanstack/react-query": "^5.95.2",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "classnames": "^2.5.1",
+    "ky": "^1.14.3",
     "lightningcss": "^1.32.0",
     "next": "^16.2.1",
     "react": "^19.2.4",
@@ -26,6 +30,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
+    "@svgr/cli": "^8.1.0",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
     "@tauri-apps/cli": "^2",
     "@types/node": "^24.0.0",
     "@types/react": "^19.1.8",
