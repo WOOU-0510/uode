@@ -31,6 +31,9 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Install frontend deps
+        run: bun install --frozen-lockfile
+
       - name: Parse release repository
         shell: pwsh
         run: |
@@ -58,7 +61,7 @@ jobs:
           releaseCommitish: ${{ github.sha }}
           releaseDraft: false
           prerelease: ${{ contains(github.ref_name, '-beta.') }}
-          uploadUpdaterJson: true
+          includeUpdaterJson: true
           updaterJsonPreferNsis: true
-          releaseAssetNamePattern: "uode-[version]-installer-[platform][ext]"
+          assetNamePattern: "uode-[version]-installer-[platform][ext]"
 
