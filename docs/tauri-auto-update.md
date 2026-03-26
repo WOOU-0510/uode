@@ -17,7 +17,7 @@
 업데이터 서명 키를 생성합니다.
 
 ```bash
-npm run tauri signer generate -- -w ~/.tauri/uode.key
+bun run tauri signer generate -- -w ~/.tauri/uode.key
 ```
 
 - private key: 절대 외부 공유 금지
