@@ -1,0 +1,11 @@
+{
+  "name": "@uode/base-ui-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./store": "./store/index.ts",
+    "./popover": "./popover/index.ts",
+    "./surface": "./surface/index.ts"
+  }
+}

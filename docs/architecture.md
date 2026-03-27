@@ -11,6 +11,7 @@
 
 ## 전체 구조 (큰 그림)
 
+- **모노레포**: 루트에서 [Turborepo](https://turbo.build/)(`turbo`)로 워크스페이스 스크립트를 실행합니다. Next.js 앱은 `apps/web/`에 있으며, 아래 `src/` 경로는 모두 `apps/web/src/`를 뜻합니다.
 - **프론트엔드**: Next.js App Router 기반
   - `src/app/`: 라우트(페이지)와 라우트 내부 전용 UI/로직
   - `src/shared/`: 범용 유틸, 공용 라이브러리 래퍼, 전역 스타일 토대, 공용 자산
@@ -55,7 +56,7 @@
 전역 `@layer`는 **토대**에만 사용한다.
 
 - 사용 위치:
-  - `src/shared/styles/global/order.scss`에서 레이어 선언 순서만 관리
+  - `apps/web/src/shared/styles/global/order.scss`에서 레이어 선언 순서만 관리
   - (예: reset/vendor/base 및 추후 UI-kit 레이어)
 - 사용하지 않는 위치:
   - `app` / `widgets` / `features` / `entities`의 **CSS Module 내부**
@@ -112,6 +113,19 @@ Playground는 두 가지 방향이 모두 가능하다.
 - `"use client"`는 `.ts`에도 동일하게 사용 가능하다
 
 특히 store 파일처럼 JSX가 없는 모듈은 `.ts`가 기본이며, JSX는 `createStore.tsx` 같은 “Provider 구현부”에만 존재할 수 있다.
+
+## React 코드 컨벤션
+
+- React 타입/훅을 사용할 때는 반드시 `React.` 프리픽스를 사용한다.
+  - 예: `React.ReactNode`, `React.SVGProps`, `React.useMemo`, `React.useSyncExternalStore`
+  - import는 `import * as React from "react"` 또는 타입 전용일 때 `import type * as React from "react"`를 사용한다.
+- 함수/컴포넌트 선언은 `function` 선언문 대신 화살표 함수(`const fn = (...) => {}`)를 기본으로 사용한다.
+- 컴포넌트는 props를 함수 시그니처에서 바로 구조분해하지 않고, 함수 본문에서 구조분해한다.
+  - 권장: `const Comp = (props: CompProps) => { const { a } = props; ... }`
+- 모든 컴포넌트는 props가 없더라도 컴포넌트 바로 위에 props 타입을 명시한다.
+  - 예: `type CompProps = Record<string, never>;`
+- base-ui 컴파운드 API는 `React.xxx`처럼 prefix 네임스페이스를 우선 사용한다.
+  - 권장: `Popover.Root`, `Popover.Host`, `Popover.useController`, `Popover.Controller`
 
 ## 커밋 메시지 규칙
 
