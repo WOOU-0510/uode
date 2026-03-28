@@ -78,6 +78,8 @@ jobs:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
           tauriScript: bun run tauri
+          # WiX(MSI)는 프리릴리즈에 문자열(beta 등)이 있으면 실패함. 업데이터는 NSIS 우선이므로 MSI 생략.
+          args: --bundles nsis
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
           releaseBody: "Automated release for ${{ github.ref_name }}"
