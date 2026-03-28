@@ -4,6 +4,7 @@ import * as React from "react";
 import type { Popover } from "@uode/base-ui-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { closeCurrentWindow } from "@/shared/lib/tauri";
 import styles from "./menu.panel.module.scss";
 
 type EscapeMenuPanelProps = {
@@ -51,6 +52,13 @@ export const EscapeMenuPanel = (props: EscapeMenuPanelProps) => {
           onClick={() => controller.closeTopPanel()}
         >
           닫기
+        </button>
+        <button
+          type="button"
+          className={styles.buttonDanger}
+          onClick={() => void closeCurrentWindow()}
+        >
+          앱 종료
         </button>
       </div>
     </>

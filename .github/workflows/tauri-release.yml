@@ -30,8 +30,37 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install frontend deps
-        run: bun install --frozen-lockfile
+      # 태그(v0.2.0) → semver(0.2.0)로 Cargo/tauri 버전 동기화 (빌드·latest.json과 일치)
+      - name: Sync app version from release tag
+        shell: bash
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          derived="${REF_NAME#v}"
+          if [[ -z "$derived" ]]; then
+            echo "Could not derive semver from tag: $REF_NAME"
+            exit 1
+          fi
+          export DERIVED_VER="$derived"
+          node <<'NODE'
+          const fs = require("fs");
+          const ver = process.env.DERIVED_VER;
+          if (!ver) {
+            throw new Error("DERIVED_VER is empty");
+          }
+          const cargoPath = "src-tauri/Cargo.toml";
+          let cargo = fs.readFileSync(cargoPath, "utf8");
+          const updated = cargo.replace(/^version = "[^"]*"/m, `version = "${ver}"`);
+          if (updated === cargo) {
+            throw new Error("Failed to update version in Cargo.toml");
+          }
+          fs.writeFileSync(cargoPath, updated);
+          const tauriPath = "src-tauri/tauri.conf.json";
+          const conf = JSON.parse(fs.readFileSync(tauriPath, "utf8"));
+          conf.version = ver;
+          fs.writeFileSync(tauriPath, JSON.stringify(conf, null, 2) + "\n");
+          NODE
 
       - name: Build and publish with tauri-action
         uses: tauri-apps/tauri-action@v0.6.2
@@ -49,5 +78,6 @@ jobs:
           prerelease: ${{ contains(github.ref_name, '-beta.') }}
           includeUpdaterJson: true
           updaterJsonPreferNsis: true
-          assetNamePattern: "uode-[version]-installer-[platform][ext]"
+          # Git 태그 문자열과 업로드 파일명 일치 (예: uode-v0.2.0-installer-windows.exe)
+          assetNamePattern: "uode-${{ github.ref_name }}-installer-[platform][ext]"
 

@@ -5,6 +5,7 @@ import type { Popover } from "@uode/base-ui-react";
 import {
   checkForAppUpdate,
   downloadAndInstallLatestUpdate,
+  isTauriRuntime,
   type UpdateCheckResult,
 } from "@/shared/lib/tauri";
 import { toErrorMessage } from "@/shared/utils";
@@ -25,6 +26,10 @@ export const EscapeSettingsPanel = (props: EscapeSettingsPanelProps) => {
 
   const handleCheckUpdate = React.useCallback(async () => {
     setFeedback(null);
+    if (!isTauriRuntime()) {
+      setFeedback("데스크톱 앱에서만 업데이트를 확인할 수 있습니다.");
+      return;
+    }
     setIsChecking(true);
     try {
       const nextInfo = await checkForAppUpdate();
@@ -45,6 +50,10 @@ export const EscapeSettingsPanel = (props: EscapeSettingsPanelProps) => {
 
   const handleInstallUpdate = React.useCallback(async () => {
     setFeedback(null);
+    if (!isTauriRuntime()) {
+      setFeedback("데스크톱 앱에서만 업데이트를 설치할 수 있습니다.");
+      return;
+    }
     setIsInstalling(true);
     try {
       const installed = await downloadAndInstallLatestUpdate();

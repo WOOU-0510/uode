@@ -34,7 +34,7 @@ const EscapePopoverBackdrop = (props: EscapePopoverBackdropProps) => {
 };
 
 const EscapePopoverKeyboardShortcut = (
-  props: EscapePopoverKeyboardShortcutProps
+  props: EscapePopoverKeyboardShortcutProps,
 ) => {
   const {} = props;
   const controller = Popover.useController();

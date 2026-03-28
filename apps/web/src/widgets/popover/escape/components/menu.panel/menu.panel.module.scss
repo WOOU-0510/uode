@@ -29,3 +29,13 @@
     background: color-mix(in srgb, CanvasText 8%, transparent);
   }
 }
+
+.buttonDanger {
+  composes: button;
+  border-color: color-mix(in srgb, #b42318 45%, CanvasText 12%);
+  background: color-mix(in srgb, #b42318 10%, transparent);
+
+  &:hover {
+    background: color-mix(in srgb, #b42318 16%, transparent);
+  }
+}
