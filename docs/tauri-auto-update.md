@@ -4,8 +4,7 @@
 
 ## 현재 구성 요약
 
-- 소스 저장소: private
-- 업데이트 아티팩트 저장소: public GitHub Releases (별도 repo)
+- 소스·릴리즈 저장소: 동일 GitHub 저장소 (Actions가 이 레포에 Release 업로드)
 - 배포 자동화: GitHub Actions + `tauri-apps/tauri-action`
 - 릴리즈 트리거: `v*` 태그 푸시
 - 채널: stable / beta
@@ -29,7 +28,7 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 
 - `bundle.createUpdaterArtifacts: true`
 - `plugins.updater.pubkey`: 실제 public key 값
-- `plugins.updater.endpoints`: public release repo의 `latest.json` URL
+- `plugins.updater.endpoints`: **이 저장소** GitHub Releases의 `latest.json` URL (`https://github.com/<owner>/<repo>/releases/latest/download/latest.json`)
 
 예시:
 
@@ -44,24 +43,25 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 }
 ```
 
-## 3) GitHub Secrets 설정 (소스 repo)
+## 3) GitHub Secrets 설정 (이 저장소)
 
-아래 시크릿을 소스 저장소에 등록합니다.
+아래 시크릿을 등록합니다.
 
-- `RELEASE_REPO`: `owner/repo` 형태 (public 릴리즈 저장소)
-- `GH_PAT_RELEASE_REPO`: public 릴리즈 저장소에 release write 가능한 PAT
 - `TAURI_SIGNING_PRIVATE_KEY`: private key 파일의 내용(또는 경로 문자열)
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: 키 비밀번호(없으면 빈 문자열)
+
+릴리즈 업로드는 워크플로의 기본 `GITHUB_TOKEN`(`contents: write`)으로 동일 저장소에 생성합니다. 별도 `RELEASE_REPO` / PAT는 필요 없습니다.
+
+### 저장소가 private일 때 (업데이터)
+
+GitHub는 **private 저장소의 Release 자산**에 대해 저장소 읽기 권한이 있는 사용자만 접근할 수 있습니다.  
+일반 사용자 PC에서 돌아가는 앱이 `latest.json`·설치 파일 URL을 **인증 없이** 받아야 한다면, Release는 **public 저장소**에 두거나, 자산을 **공개 CDN/S3 등**에 올리고 endpoint를 그쪽으로 맞추는 방식을 검토해야 합니다.
 
 ## 4) 릴리즈 방식
 
 워크플로우는 `tauri-action`으로 번들/릴리즈 업로드를 수행하며, updater JSON 업로드를 활성화합니다.
 
-### 소스 repo와 릴리즈 repo가 다를 때
-
-GitHub Release는 **릴리즈를 올리는 저장소**에 존재하는 커밋/브랜치만 `target_commitish`로 쓸 수 있습니다.  
-소스(private)에서 빌드한 커밋 SHA(`github.sha`)는 public 릴리즈 repo에 없을 수 있으므로, 워크플로우에서는 `releaseCommitish`를 **릴리즈 repo의 기본 브랜치**(예: `main`)로 두는 방식을 사용합니다.  
-(태그 이름과 업로드 자산은 CI 빌드 결과를 그대로 씁니다.)
+워크플로우는 **이 저장소**에 릴리즈를 만들며, `releaseCommitish`는 태그가 가리키는 커밋(`github.sha`)을 사용합니다.
 
 - stable 태그(`vX.Y.Z`) → `latest.json`
 - beta 태그(`vX.Y.Z-beta.N`) → `latest-beta.json`

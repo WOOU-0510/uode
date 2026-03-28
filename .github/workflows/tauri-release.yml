@@ -8,10 +8,9 @@ on:
 jobs:
   release-tauri:
     permissions:
-      contents: read
+      contents: write
     runs-on: windows-latest
     env:
-      RELEASE_REPO: ${{ secrets.RELEASE_REPO }}
       TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
     steps:
@@ -34,32 +33,18 @@ jobs:
       - name: Install frontend deps
         run: bun install --frozen-lockfile
 
-      - name: Parse release repository
-        shell: pwsh
-        run: |
-          if ([string]::IsNullOrWhiteSpace($env:RELEASE_REPO)) {
-            throw "RELEASE_REPO secret is missing (expected: owner/repo)."
-          }
-          $parts = $env:RELEASE_REPO.Split("/")
-          if ($parts.Length -ne 2) {
-            throw "RELEASE_REPO must be in owner/repo format."
-          }
-          "RELEASE_OWNER=$($parts[0])" | Out-File -FilePath $env:GITHUB_ENV -Append
-          "RELEASE_NAME=$($parts[1])" | Out-File -FilePath $env:GITHUB_ENV -Append
-
       - name: Build and publish with tauri-action
         uses: tauri-apps/tauri-action@v0.6.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT_RELEASE_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          owner: ${{ env.RELEASE_OWNER }}
-          repo: ${{ env.RELEASE_NAME }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
           tauriScript: bun run tauri
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
           releaseBody: "Automated release for ${{ github.ref_name }}"
-          # 릴리즈 대상이 다른 repo(u-modules/uode)일 때는 소스 repo의 github.sha를 쓰면 안 됨(해당 SHA가 대상 repo에 없음).
-          releaseCommitish: main
+          releaseCommitish: ${{ github.sha }}
           releaseDraft: false
           prerelease: ${{ contains(github.ref_name, '-beta.') }}
           includeUpdaterJson: true
