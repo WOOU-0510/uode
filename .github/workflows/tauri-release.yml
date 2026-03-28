@@ -5,10 +5,12 @@ on:
     tags:
       - "v*"
 
+# GITHUB_TOKEN으로 Release 생성·에셋 업로드에 필요 (없으면 "Resource not accessible by integration")
+permissions:
+  contents: write
+
 jobs:
   release-tauri:
-    permissions:
-      contents: write
     runs-on: windows-latest
     env:
       TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
