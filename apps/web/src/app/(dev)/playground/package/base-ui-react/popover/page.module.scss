@@ -1,5 +1,5 @@
 .page {
-  max-width: 52rem;
+  width: 100%;
 }
 
 .pageHeader {
@@ -24,7 +24,7 @@
   border: 1px solid var(--playground-border);
   border-radius: 0.6rem;
   padding: 0.85rem;
-  background: #121821;
+  background: var(--playground-card);
 
   h2 {
     margin: 0;
@@ -43,7 +43,7 @@
   padding: 0.4rem 0.7rem;
   border-radius: 0.4rem;
   border: 1px solid var(--playground-border);
-  background: #0f141c;
+  background: var(--playground-code-bg);
   color: inherit;
   font: inherit;
   cursor: pointer;

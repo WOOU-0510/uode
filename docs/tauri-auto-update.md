@@ -49,8 +49,10 @@ bun run tauri signer generate -- -w ~/.tauri/uode.key
 
 - `TAURI_SIGNING_PRIVATE_KEY`: private key 파일의 내용(또는 경로 문자열)
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: 키 비밀번호(없으면 빈 문자열)
+- `TAURI_RELEASE_TOKEN`: (선택) **직접 만든 PAT 한 개만** 등록. GitHub가 자동으로 넣는 `GITHUB_TOKEN`은 시크릿으로 만들지 않는다.  
+  Actions에서 Release 생성 시 `Resource not accessible by integration` 이 나오면(조직 정책 등) **Classic PAT `repo`** 또는 **Fine-grained: Contents Read and write + Metadata Read** 로 이 저장소에 권한을 주고, 조직이 SAML SSO를 쓰면 해당 PAT에 **Authorize**까지 해 둔다.
 
-릴리즈 업로드는 워크플로의 기본 `GITHUB_TOKEN`(`contents: write`)으로 동일 저장소에 생성합니다. 별도 `RELEASE_REPO` / PAT는 필요 없습니다.
+기본적으로는 워크플로의 자동 `GITHUB_TOKEN`(`permissions: contents: write`)으로 Release를 만든다. 저장소 **Settings → Actions → General → Workflow permissions** 에서 **Read and write** 가 켜져 있어야 한다.
 
 ### 저장소가 private일 때 (업데이터)
 

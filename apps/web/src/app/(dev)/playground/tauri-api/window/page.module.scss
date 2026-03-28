@@ -1,5 +1,5 @@
 .page {
-  max-width: 52rem;
+  width: 100%;
 }
 
 .pageHeader {
@@ -24,6 +24,6 @@
   font-size: 0.85em;
   padding: 0.12em 0.35em;
   border-radius: 0.2rem;
-  background: #0c0e12;
+    background: var(--playground-code-bg);
   border: 1px solid var(--playground-border);
 }
