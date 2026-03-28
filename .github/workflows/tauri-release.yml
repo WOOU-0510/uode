@@ -69,7 +69,8 @@ jobs:
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
-          tauriScript: bun run tauri
+          # 로컬은 bun이 .bin을 잡아주지만, Windows runner + tauri-action 조합에서는 `tauri`만 호출되며 PATH에 없을 수 있음
+          tauriScript: bunx @tauri-apps/cli
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
           releaseBody: "Automated release for ${{ github.ref_name }}"
@@ -80,4 +81,3 @@ jobs:
           updaterJsonPreferNsis: true
           # Git 태그 문자열과 업로드 파일명 일치 (예: uode-v0.2.0-installer-windows.exe)
           assetNamePattern: "uode-${{ github.ref_name }}-installer-[platform][ext]"
-
