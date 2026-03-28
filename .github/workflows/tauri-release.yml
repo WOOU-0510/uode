@@ -75,7 +75,9 @@ jobs:
       - name: Build and publish with tauri-action
         uses: tauri-apps/tauri-action@v0.6.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 기본은 워크플로 자동 토큰(github.token). 조직 정책 등으로 Release API가 막히면
+          # repo Contents 쓰기 가능한 PAT를 시크릿 TAURI_RELEASE_TOKEN 으로 넣으면 그걸 사용함.
+          GITHUB_TOKEN: ${{ secrets.TAURI_RELEASE_TOKEN != '' && secrets.TAURI_RELEASE_TOKEN || github.token }}
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
