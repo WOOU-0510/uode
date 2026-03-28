@@ -1,8 +1,8 @@
 "use client";
 import * as React from "react";
-import { Popover } from "@uode/base-ui-react/popover";
-import { EscapePopoverPanelSwitch } from "./components";
-import styles from "./popover.layout.module.scss";
+import { Popover } from "@uode/base-ui-react";
+import { EscapePopoverPanelSwitch } from "../";
+import styles from "./layout.module.scss";
 
 type GlobalPopoversLayoutProps = {
   children: React.ReactNode;
@@ -12,18 +12,11 @@ export const GlobalPopoversLayout = (props: GlobalPopoversLayoutProps) => {
   const { children } = props;
 
   return (
-    <Popover.Root
-      onPointerDownOutside={(controller) => {
-        controller.closeTopPanel();
-      }}
-    >
+    <Popover.Root>
       {children}
       <EscapePopoverKeyboardShortcut />
-      <Popover.Host
-        id="uode-escape-popover"
-        className={styles.layer}
-        backdropClassName={styles.backdrop}
-      >
+      <EscapePopoverBackdrop />
+      <Popover.Host id="uode-escape-popover" className={styles.layer}>
         <EscapePopoverPanelSwitch />
       </Popover.Host>
     </Popover.Root>
@@ -32,8 +25,16 @@ export const GlobalPopoversLayout = (props: GlobalPopoversLayoutProps) => {
 
 type EscapePopoverKeyboardShortcutProps = Record<string, never>;
 
+type EscapePopoverBackdropProps = Record<string, never>;
+
+const EscapePopoverBackdrop = (props: EscapePopoverBackdropProps) => {
+  const {} = props;
+  const controller = Popover.useController();
+  return <Popover.Backdrop onClick={() => controller.closeTopPanel()} />;
+};
+
 const EscapePopoverKeyboardShortcut = (
-  props: EscapePopoverKeyboardShortcutProps,
+  props: EscapePopoverKeyboardShortcutProps
 ) => {
   const {} = props;
   const controller = Popover.useController();

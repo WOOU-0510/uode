@@ -21,8 +21,8 @@ export type PlaygroundNavLink = {
 export type PlaygroundNavGroup = {
   kind: "group";
   /** `playground/` 아래 폴더명과 동일 */
-  segment: "lib" | "tauri-api";
-  items: readonly PlaygroundNavLink[];
+  segment: "lib" | "tauri-api" | "package" | "base-ui-react";
+  items: readonly PlaygroundNavEntry[];
 };
 
 export type PlaygroundNavEntry = PlaygroundNavLink | PlaygroundNavGroup;
@@ -40,6 +40,23 @@ export const NAV_ENTRIES: readonly PlaygroundNavEntry[] = [
     items: [
       { kind: "link", href: "/playground/tauri-api/window", label: "window" },
       { kind: "link", href: "/playground/tauri-api/health", label: "health" },
+    ],
+  },
+  {
+    kind: "group",
+    segment: "package",
+    items: [
+      {
+        kind: "group",
+        segment: "base-ui-react",
+        items: [
+          {
+            kind: "link",
+            href: "/playground/package/base-ui-react/popover",
+            label: "popover",
+          },
+        ],
+      },
     ],
   },
 ];

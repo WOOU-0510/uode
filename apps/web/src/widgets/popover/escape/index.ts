@@ -1,2 +1,2 @@
-export { GlobalPopoversLayout } from "./popover.layout";
+export { GlobalPopoversLayout } from "./components";
 export { EscapePopoverPanelSwitch } from "./components";

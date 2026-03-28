@@ -20,9 +20,8 @@
     "allowJs": true,
     "incremental": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "@scripts/*": ["./scripts/*"]
     },
     "plugins": [

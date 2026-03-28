@@ -3,6 +3,7 @@ import { GlobalPopoversLayout } from "@/widgets/popover/escape";
 import cn from "classnames";
 import type * as React from "react";
 import "@/shared/styles/globals.scss";
+import "@uode/base-ui-react/style.css";
 
 type RootLayoutProps = {
   children: React.ReactNode;

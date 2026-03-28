@@ -3,19 +3,42 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
-    "./popover": "./popover/index.ts"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "bun run clean && tsdown"
   },
   "dependencies": {
     "@uode/base-ui-core": "workspace:*"
   },
   "peerDependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19",
+    "react-dom": "^19",
+    "classnames": "^2.5.1"
   },
   "devDependencies": {
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "typescript": "~5.8.3"
+    "@biomejs/biome": "2.3.11",
+    "@tsdown/css": "^0.21.6",
+    "@types/bun": "latest",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "lightningcss": "^1.32.0",
+    "sass": "^1.98.0",
+    "tsdown": "^0.21.6",
+    "typescript": "^6.0.2"
   }
 }

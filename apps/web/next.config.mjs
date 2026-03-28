@@ -15,7 +15,7 @@ const nextConfig = {
   // Next.js React Compiler 활성화
   // 참고: https://nextjs.org/docs/app/api-reference/config/next-config-js/reactCompiler
   reactCompiler: true,
-  transpilePackages: ["@uode/base-ui-core", "@uode/base-ui-react"],
+  transpilePackages: ["@uode/base-ui-core"],
   typedRoutes: true,
   logging: {
     browserToTerminal: true,

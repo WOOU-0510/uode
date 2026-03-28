@@ -2,19 +2,13 @@
   position: fixed;
   inset: 0;
   margin: auto;
+  z-index: 20;
   padding: 1.25rem;
   max-width: min(22rem, calc(100vw - 2rem));
   border-radius: 0.75rem;
   border: 1px solid color-mix(in srgb, CanvasText 12%, transparent);
   background: Canvas;
   color: CanvasText;
-  box-shadow:
-    0 1px 2px color-mix(in srgb, CanvasText 8%, transparent),
+  box-shadow: 0 1px 2px color-mix(in srgb, CanvasText 8%, transparent),
     0 12px 40px color-mix(in srgb, CanvasText 18%, transparent);
-}
-
-.backdrop {
-  &::backdrop {
-    background: color-mix(in srgb, CanvasText 35%, transparent);
-  }
 }

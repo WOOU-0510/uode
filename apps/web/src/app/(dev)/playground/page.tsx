@@ -24,6 +24,11 @@ const HUB_ITEMS = [
       </>
     ),
   },
+  {
+    href: "/playground/package/base-ui-react/popover",
+    title: "package / base-ui-react / popover",
+    description: "base-ui-react의 Popover 컴파운드 API를 직접 테스트합니다.",
+  },
 ] satisfies readonly {
   href: PlaygroundNavHref;
   title: string;

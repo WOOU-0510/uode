@@ -3,9 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
-    "./store": "./store/index.ts",
-    "./popover": "./popover/index.ts",
-    "./surface": "./surface/index.ts"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "bun run clean && tsdown"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsdown": "^0.21.6",
+    "typescript": "^6.0.2"
   }
 }

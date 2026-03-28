@@ -1,0 +1,92 @@
+.page {
+  max-width: 52rem;
+}
+
+.pageHeader {
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--playground-muted);
+    line-height: 1.55;
+    font-size: 0.95rem;
+  }
+}
+
+.section {
+  border: 1px solid var(--playground-border);
+  border-radius: 0.6rem;
+  padding: 0.85rem;
+  background: #121821;
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.button {
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--playground-border);
+  background: #0f141c;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.layer {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  z-index: 20;
+  width: min(22rem, calc(100vw - 2rem));
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, CanvasText 14%, transparent);
+  background: Canvas;
+  color: CanvasText;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, CanvasText 8%, transparent),
+    0 12px 40px color-mix(in srgb, CanvasText 18%, transparent);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: color-mix(in srgb, CanvasText 35%, transparent);
+}
+
+.panel {
+  padding: 1rem;
+}
+
+.panelTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.panelSub {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.8;
+}

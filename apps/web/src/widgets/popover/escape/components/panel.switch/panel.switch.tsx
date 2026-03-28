@@ -1,7 +1,7 @@
 "use client";
 
 import type * as React from "react";
-import { Popover } from "@uode/base-ui-react/popover";
+import { Popover } from "@uode/base-ui-react";
 import { EscapeMenuPanel, EscapeSettingsPanel } from "../";
 import styles from "./panel.switch.module.scss";
 

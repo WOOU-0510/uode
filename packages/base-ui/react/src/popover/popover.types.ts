@@ -1,19 +1,14 @@
-"use client";
-
 import type * as React from "react";
-
-type OpenMode = "replace" | "stack";
-
-export type PopoverPanelEntry = {
-  id: string;
-  key: string;
-  params: unknown;
-};
+import type { PopoverOpenMode, PopoverPanelEntry } from "@uode/base-ui-core";
 
 export type PopoverController = {
   entries: ReadonlyArray<PopoverPanelEntry>;
   topEntry: PopoverPanelEntry | null;
-  openPanel: (key: string, params: unknown, options?: { mode?: OpenMode }) => void;
+  openPanel: (
+    key: string,
+    params: unknown,
+    options?: { mode?: PopoverOpenMode },
+  ) => void;
   closeTopPanel: () => void;
   closeAllPanels: () => void;
 };

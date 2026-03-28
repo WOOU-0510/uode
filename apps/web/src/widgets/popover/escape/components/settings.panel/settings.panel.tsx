@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { Popover } from "@uode/base-ui-react/popover";
+import type { Popover } from "@uode/base-ui-react";
 import {
   checkForAppUpdate,
   downloadAndInstallLatestUpdate,

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { Popover } from "@uode/base-ui-react/popover";
+import type { Popover } from "@uode/base-ui-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./menu.panel.module.scss";
