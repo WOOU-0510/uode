@@ -30,6 +30,14 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Tauri/turbo가 띄운 하위 프로세스에도 turbo·tsdown·tauri 등이 PATH에서 잡히도록 (로컬과 동일)
+      - name: Expose workspace node_modules/.bin on PATH
+        shell: bash
+        run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
       # 태그(v0.2.0) → semver(0.2.0)로 Cargo/tauri 버전 동기화 (빌드·latest.json과 일치)
       - name: Sync app version from release tag
         shell: bash
@@ -69,8 +77,7 @@ jobs:
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
-          # 로컬은 bun이 .bin을 잡아주지만, Windows runner + tauri-action 조합에서는 `tauri`만 호출되며 PATH에 없을 수 있음
-          tauriScript: bun x @tauri-apps/cli
+          tauriScript: bun run tauri
           tagName: ${{ github.ref_name }}
           releaseName: ${{ github.ref_name }}
           releaseBody: "Automated release for ${{ github.ref_name }}"
