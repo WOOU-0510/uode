@@ -1,4 +1,4 @@
-/* 이 파일은 scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
+/* 이 파일은 packages/base-ui/react/scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
 
 import * as React from "react";
 

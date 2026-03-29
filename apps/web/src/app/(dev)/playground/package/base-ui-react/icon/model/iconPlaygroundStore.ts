@@ -1,7 +1,7 @@
 "use client";
 
+import type { IconName } from "@uode/base-ui-react";
 import { createStore } from "@/shared/lib/zustand";
-import type { IconName } from "@/shared/lib/icons";
 
 export type IconPlaygroundSetting = {
   color: string;
@@ -9,12 +9,13 @@ export type IconPlaygroundSetting = {
 };
 
 const buildInitialSettings = (): Record<IconName, IconPlaygroundSetting> => {
-  return {
+  const settings = {
     arrow_range: { color: "#5a6478", sizePx: 48 },
     react: { color: "#149eca", sizePx: 48 },
     tauri: { color: "#ffc131", sizePx: 48 },
     vite: { color: "#646cff", sizePx: 48 },
-  };
+  } satisfies Record<IconName, IconPlaygroundSetting>;
+  return settings;
 };
 
 export type IconPlaygroundState = {

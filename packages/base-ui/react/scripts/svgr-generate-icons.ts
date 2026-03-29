@@ -106,10 +106,10 @@ const main = async (): Promise<void> => {
   const argv = process.argv.slice(2);
 
   const inputDir =
-    getFlagValue(argv, "--input") ?? path.join("public", "icons");
+    getFlagValue(argv, "--input") ?? path.join("assets", "icons");
   const outputDir =
     getFlagValue(argv, "--output") ??
-    path.join("src", "shared", "lib", "icons", "generated");
+    path.join("src", "icons", "generated");
 
   const args: GenerateIconsArgs = { inputDir, outputDir };
 
@@ -217,7 +217,7 @@ const main = async (): Promise<void> => {
     return `  ${key}: ${meta.componentName},`;
   });
 
-  const registrySource = `/* 이 파일은 scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
+  const registrySource = `/* 이 파일은 packages/base-ui/react/scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
 
 import * as React from "react";
 

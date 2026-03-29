@@ -15,7 +15,7 @@
     "format": "biome format --write",
     "format:fix": "biome format --write --fix",
     "tauri": "tauri",
-    "ic:g": "turbo run ic:g --filter=web",
+    "ic:g": "turbo run ic:g --filter=@uode/base-ui-react",
     "t:g": "turbo run t:g --filter=web"
   },
   "devDependencies": {

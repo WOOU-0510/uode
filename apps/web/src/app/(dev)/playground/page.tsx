@@ -5,9 +5,10 @@ import styles from "./page.module.scss";
 
 const HUB_ITEMS = [
   {
-    href: "/playground/lib/icon",
-    title: "lib / icon",
-    description: "SVGR로 생성된 아이콘을 이름·색·크기로 미리 봅니다.",
+    href: "/playground/package/base-ui-react/icon",
+    title: "package / base-ui-react / icon",
+    description:
+      "@uode/base-ui-react의 assets/icons 기준 SVGR 아이콘을 이름·색·크기로 미리 봅니다.",
   },
   {
     href: "/playground/tauri-api/window",

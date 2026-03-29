@@ -3,7 +3,7 @@
 import type * as React from "react";
 import cn from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Icon } from "@/shared/lib/icons";
+import { Icon } from "@uode/base-ui-react";
 import { PlaygroundSidebar } from "../PlaygroundSidebar";
 import styles from "./PlaygroundShell.module.scss";
 

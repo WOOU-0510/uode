@@ -15,12 +15,15 @@
     "./style.css": "./dist/style.css"
   },
   "files": [
+    "assets",
     "dist",
+    "scripts",
     "src"
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "bun run clean && tsdown"
+    "build": "bun run clean && tsdown",
+    "ic:g": "bun run ./scripts/svgr-generate-icons.ts"
   },
   "dependencies": {
     "@uode/base-ui-core": "workspace:*"
@@ -31,6 +34,8 @@
     "classnames": "^2.5.1"
   },
   "devDependencies": {
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
     "@biomejs/biome": "2.3.11",
     "@tsdown/css": "^0.21.6",
     "@types/bun": "latest",
