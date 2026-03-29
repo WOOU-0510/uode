@@ -19,10 +19,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 5.5rem;
+  box-sizing: border-box;
   border-radius: 0.375rem;
   background: var(--playground-code-bg);
   border: 1px dashed var(--playground-border);
+  flex-shrink: 0;
 }
 
 .iconName {

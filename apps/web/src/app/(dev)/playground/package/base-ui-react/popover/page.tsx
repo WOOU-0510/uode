@@ -24,7 +24,7 @@ const BaseUiReactPopoverPlaygroundPage = (
         <PopoverExamples />
 
         <PopoverExampleBackdrop />
-        <Popover.Host className={styles.layer}>
+        <Popover.Host>
           <PopoverPanelBody />
         </Popover.Host>
       </main>
@@ -38,10 +38,7 @@ const PopoverExampleBackdrop = (props: PopoverExampleBackdropProps) => {
   const {} = props;
   const controller = Popover.useController();
   return (
-    <Popover.Backdrop
-      className={styles.backdrop}
-      onClick={() => controller.closeTopPanel()}
-    />
+    <Popover.Backdrop onClick={() => controller.closeTopPanel()} />
   );
 };
 

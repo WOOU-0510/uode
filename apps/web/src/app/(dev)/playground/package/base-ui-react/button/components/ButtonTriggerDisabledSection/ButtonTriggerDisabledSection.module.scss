@@ -1,0 +1,27 @@
+.section {
+  border: 1px solid var(--playground-border);
+  border-radius: 0.6rem;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+  background: var(--playground-card);
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0.5rem 0 0;
+    color: var(--playground-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}

@@ -30,6 +30,12 @@ const HUB_ITEMS = [
     title: "package / base-ui-react / popover",
     description: "base-ui-react의 Popover 컴파운드 API를 직접 테스트합니다.",
   },
+  {
+    href: "/playground/package/base-ui-react/button",
+    title: "package / base-ui-react / button",
+    description:
+      "base-ui-react의 Button 컴파운드 API(토글, 비활성, 제어 props)를 확인합니다.",
+  },
 ] satisfies readonly {
   href: PlaygroundNavHref;
   title: string;

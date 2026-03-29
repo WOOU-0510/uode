@@ -54,28 +54,6 @@
   }
 }
 
-.layer {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  z-index: 20;
-  width: min(22rem, calc(100vw - 2rem));
-  border-radius: 0.75rem;
-  border: 1px solid color-mix(in srgb, CanvasText 14%, transparent);
-  background: Canvas;
-  color: CanvasText;
-  box-shadow:
-    0 1px 2px color-mix(in srgb, CanvasText 8%, transparent),
-    0 12px 40px color-mix(in srgb, CanvasText 18%, transparent);
-}
-
-.backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: color-mix(in srgb, CanvasText 35%, transparent);
-}
-
 .panel {
   padding: 1rem;
 }

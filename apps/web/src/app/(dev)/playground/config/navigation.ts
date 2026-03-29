@@ -55,6 +55,11 @@ export const NAV_ENTRIES: readonly PlaygroundNavEntry[] = [
             href: "/playground/package/base-ui-react/popover",
             label: "popover",
           },
+          {
+            kind: "link",
+            href: "/playground/package/base-ui-react/button",
+            label: "button",
+          },
         ],
       },
     ],
