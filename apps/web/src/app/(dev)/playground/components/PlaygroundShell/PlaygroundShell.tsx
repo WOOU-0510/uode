@@ -39,12 +39,16 @@ type PlaygroundShellProps = {
 
 export const PlaygroundShell = (props: PlaygroundShellProps) => {
   const { children } = props;
-  const [sidebarWidthPx, setSidebarWidthPx] = useState(SIDEBAR_WIDTH_DEFAULT_PX);
+  const [sidebarWidthPx, setSidebarWidthPx] = useState(
+    SIDEBAR_WIDTH_DEFAULT_PX,
+  );
   const [sidebarMaxPx, setSidebarMaxPx] = useState(SIDEBAR_MAX_ABS_PX);
   const gutterRef = useRef<HTMLButtonElement>(null);
-  const dragRef = useRef<{ pointerId: number; startX: number; startWidth: number } | null>(
-    null,
-  );
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startWidth: number;
+  } | null>(null);
   const pointerMovedRef = useRef(false);
   const lastOpenWidthRef = useRef(SIDEBAR_WIDTH_DEFAULT_PX);
 
@@ -99,7 +103,9 @@ export const PlaygroundShell = (props: PlaygroundShellProps) => {
       if (!drag || event.pointerId !== drag.pointerId) {
         return;
       }
-      if (Math.abs(event.clientX - drag.startX) > POINTER_CLICK_MOVE_THRESHOLD_PX) {
+      if (
+        Math.abs(event.clientX - drag.startX) > POINTER_CLICK_MOVE_THRESHOLD_PX
+      ) {
         pointerMovedRef.current = true;
       }
       const delta = event.clientX - drag.startX;
@@ -156,7 +162,9 @@ export const PlaygroundShell = (props: PlaygroundShellProps) => {
     };
   }, [endDrag, onPointerMove]);
 
-  const onGutterPointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+  const onGutterPointerDown = (
+    event: React.PointerEvent<HTMLButtonElement>,
+  ) => {
     if (event.button !== 0) {
       return;
     }
@@ -200,9 +208,16 @@ export const PlaygroundShell = (props: PlaygroundShellProps) => {
   return (
     <div className={styles.shell}>
       <aside
-        className={cn(styles.sidebar, !navVisible ? styles.sidebarStripOnly : null)}
+        className={cn(
+          styles.sidebar,
+          !navVisible ? styles.sidebarStripOnly : null,
+        )}
         style={{ flexBasis: sidebarWidthPx, width: sidebarWidthPx }}
-        aria-label={navVisible ? "Playground 내비게이션" : "Playground 사이드 스트립(내비 접힘)"}
+        aria-label={
+          navVisible
+            ? "Playground 내비게이션"
+            : "Playground 사이드 스트립(내비 접힘)"
+        }
       >
         {navVisible ? <PlaygroundSidebar /> : null}
       </aside>

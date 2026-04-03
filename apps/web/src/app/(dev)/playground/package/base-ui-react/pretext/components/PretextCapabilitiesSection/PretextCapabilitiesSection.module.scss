@@ -1,0 +1,46 @@
+.section {
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.prose {
+  p {
+    margin: 0 0 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-fg, #1a1a1a);
+  }
+
+  a {
+    color: var(--color-link, #0b57d0);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  code {
+    font-size: 0.88em;
+  }
+}
+
+.introList {
+  margin: 0 0 0.85rem;
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+}
+
+.proseNote {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 6px;
+  background: rgb(0 100 200 / 8%);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}

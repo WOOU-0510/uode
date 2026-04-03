@@ -22,3 +22,4 @@ export {
   type PopoverStore,
   type PopoverStoreOptions,
 } from "./popover";
+export * from "./pretext";

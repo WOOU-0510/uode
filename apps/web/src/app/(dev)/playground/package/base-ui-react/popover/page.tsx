@@ -37,9 +37,7 @@ type PopoverExampleBackdropProps = Record<string, never>;
 const PopoverExampleBackdrop = (props: PopoverExampleBackdropProps) => {
   const {} = props;
   const controller = Popover.useController();
-  return (
-    <Popover.Backdrop onClick={() => controller.closeTopPanel()} />
-  );
+  return <Popover.Backdrop onClick={() => controller.closeTopPanel()} />;
 };
 
 type PopoverExamplesProps = Record<string, never>;
