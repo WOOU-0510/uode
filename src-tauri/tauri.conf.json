@@ -14,8 +14,11 @@
       {
         "label": "main",
         "title": "uode",
-        "width": 800,
-        "height": 600,
+        "width": 1200,
+        "height": 800,
+        "x": 100,
+        "y": 80,
+        "center": false,
         "decorations": false
       }
     ],

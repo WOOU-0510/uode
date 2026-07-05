@@ -1,0 +1,43 @@
+.hotzone {
+  position: fixed;
+  z-index: 1200;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 14px;
+}
+
+.dragBar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4px 0 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.grip {
+  width: 72px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(221 226 236 / 70%);
+  box-shadow: 0 1px 5px rgb(0 0 0 / 30%);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.hotzone:hover .grip,
+.hotzone:focus-within .grip {
+  opacity: 1;
+  transform: translateY(0);
+}

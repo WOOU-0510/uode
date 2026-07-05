@@ -4,6 +4,7 @@ import type * as React from "react";
 import "@/shared/styles/globals.scss";
 import "@uode/base-ui-react/style.css";
 import { geistMono, geistSans } from "@/shared/assets/fonts";
+import { HoverDragBar } from "@/widgets/shell";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ const RootLayout = (props: RootLayoutProps) => {
     <html lang="ko" className={cn(geistSans.className, geistMono.className)}>
       <head></head>
       <body>
+        <HoverDragBar />
         <GlobalPopoversLayout>{children}</GlobalPopoversLayout>
       </body>
     </html>

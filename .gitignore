@@ -73,3 +73,5 @@ next-env.d.ts
 # .cursor
 # next-agents-md
 .next-docs/
+.playwright-mcp/
+
