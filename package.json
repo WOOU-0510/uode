@@ -6,6 +6,10 @@
   "workspaces": {
     "packages": [
       "apps/*",
+      "packages/api",
+      "packages/form",
+      "packages/storage",
+      "packages/validation",
       "packages/base-ui/*"
     ],
     "catalogs": {
@@ -41,6 +45,9 @@
         "@svgr/core": "^8.1.0",
         "@svgr/plugin-jsx": "^8.1.0"
       },
+      "validation": {
+        "zod": "^4.4.3"
+      },
       "web": {
         "@tanstack/react-form": "^1.33.0",
         "@tanstack/react-form-nextjs": "^1.33.0",
@@ -56,7 +63,6 @@
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "sass": "^1.101.0",
-        "zod": "^4.4.3",
         "zustand": "^5.0.14"
       }
     }

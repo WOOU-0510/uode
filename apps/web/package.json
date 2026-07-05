@@ -21,13 +21,13 @@
     "@tauri-apps/plugin-updater": "catalog:tauri",
     "@uode/base-ui-core": "workspace:*",
     "@uode/base-ui-react": "workspace:*",
+    "@uode/validation": "workspace:*",
     "classnames": "catalog:web",
     "ky": "catalog:web",
     "lightningcss": "catalog:web",
     "next": "catalog:web",
     "react": "catalog:web",
     "react-dom": "catalog:web",
-    "zod": "catalog:web",
     "zustand": "catalog:web"
   },
   "devDependencies": {

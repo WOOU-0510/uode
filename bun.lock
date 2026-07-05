@@ -16,6 +16,7 @@
       "name": "server",
       "version": "1.0.50",
       "dependencies": {
+        "@uode/validation": "workspace:*",
         "elysia": "catalog:server",
       },
       "devDependencies": {
@@ -34,13 +35,13 @@
         "@tauri-apps/plugin-updater": "catalog:tauri",
         "@uode/base-ui-core": "workspace:*",
         "@uode/base-ui-react": "workspace:*",
+        "@uode/validation": "workspace:*",
         "classnames": "catalog:web",
         "ky": "catalog:web",
         "lightningcss": "catalog:web",
         "next": "catalog:web",
         "react": "catalog:web",
         "react-dom": "catalog:web",
-        "zod": "catalog:web",
         "zustand": "catalog:web",
       },
       "devDependencies": {
@@ -52,6 +53,15 @@
         "autoprefixer": "catalog:web",
         "babel-plugin-react-compiler": "catalog:web",
         "sass": "catalog:web",
+        "typescript": "catalog:tooling",
+      },
+    },
+    "packages/api": {
+      "name": "@uode/api",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@types/bun": "catalog:tooling",
+        "tsdown": "catalog:bundler",
         "typescript": "catalog:tooling",
       },
     },
@@ -92,6 +102,36 @@
         "react-dom": "catalog:peer",
       },
     },
+    "packages/form": {
+      "name": "@uode/form",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@types/bun": "catalog:tooling",
+        "tsdown": "catalog:bundler",
+        "typescript": "catalog:tooling",
+      },
+    },
+    "packages/storage": {
+      "name": "@uode/storage",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@types/bun": "catalog:tooling",
+        "tsdown": "catalog:bundler",
+        "typescript": "catalog:tooling",
+      },
+    },
+    "packages/validation": {
+      "name": "@uode/validation",
+      "version": "0.1.0",
+      "dependencies": {
+        "zod": "catalog:validation",
+      },
+      "devDependencies": {
+        "@types/bun": "catalog:tooling",
+        "tsdown": "catalog:bundler",
+        "typescript": "catalog:tooling",
+      },
+    },
   },
   "catalogs": {
     "bundler": {
@@ -126,6 +166,9 @@
       "@svgr/core": "^8.1.0",
       "@svgr/plugin-jsx": "^8.1.0",
     },
+    "validation": {
+      "zod": "^4.4.3",
+    },
     "web": {
       "@tanstack/react-form": "^1.33.0",
       "@tanstack/react-form-nextjs": "^1.33.0",
@@ -141,7 +184,6 @@
       "react": "^19.2.7",
       "react-dom": "^19.2.7",
       "sass": "^1.101.0",
-      "zod": "^4.4.3",
       "zustand": "^5.0.14",
     },
   },
@@ -462,9 +504,17 @@
 
     "@types/react-dom": ["@types/react-dom@19.2.3", "", { "peerDependencies": { "@types/react": "^19.2.0" } }, "sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ=="],
 
+    "@uode/api": ["@uode/api@workspace:packages/api"],
+
     "@uode/base-ui-core": ["@uode/base-ui-core@workspace:packages/base-ui/core"],
 
     "@uode/base-ui-react": ["@uode/base-ui-react@workspace:packages/base-ui/react"],
+
+    "@uode/form": ["@uode/form@workspace:packages/form"],
+
+    "@uode/storage": ["@uode/storage@workspace:packages/storage"],
+
+    "@uode/validation": ["@uode/validation@workspace:packages/validation"],
 
     "ansis": ["ansis@4.2.0", "", {}, "sha512-HqZ5rWlFjGiV0tDm3UxxgNRqsOTniqoKZu0pIAfh7TZQMGuZK+hH0drySty0si0QXj1ieop4+SkSfPZBPPkHig=="],
 
