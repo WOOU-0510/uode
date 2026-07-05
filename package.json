@@ -3,18 +3,72 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "bun@1.3.5",
-  "workspaces": [
-    "apps/*",
-    "packages/base-ui/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/base-ui/*"
+    ],
+    "catalogs": {
+      "bundler": {
+        "@tsdown/css": "^0.21.6",
+        "tsdown": "^0.21.6"
+      },
+      "peer": {
+        "classnames": "^2.5.1",
+        "react": "^19",
+        "react-dom": "^19"
+      },
+      "server": {
+        "elysia": "latest"
+      },
+      "tauri": {
+        "@tauri-apps/api": "2.9.1",
+        "@tauri-apps/cli": "^2.11.4",
+        "@tauri-apps/plugin-opener": "^2.5.4",
+        "@tauri-apps/plugin-updater": "2.9.0"
+      },
+      "tooling": {
+        "@biomejs/biome": "2.5.2",
+        "@clack/prompts": "^1.7.0",
+        "@types/bun": "latest",
+        "@types/node": "^26.1.0",
+        "bun-types": "latest",
+        "turbo": "^2.10.3",
+        "typescript": "^6.0.3"
+      },
+      "ui": {
+        "@chenglou/pretext": "^0.0.4",
+        "@svgr/core": "^8.1.0",
+        "@svgr/plugin-jsx": "^8.1.0"
+      },
+      "web": {
+        "@tanstack/react-form": "^1.33.0",
+        "@tanstack/react-form-nextjs": "^1.33.0",
+        "@tanstack/react-query": "^5.101.2",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "autoprefixer": "^10.5.2",
+        "babel-plugin-react-compiler": "^1.0.0",
+        "classnames": "^2.5.1",
+        "ky": "^1.14.3",
+        "lightningcss": "^1.32.0",
+        "next": "^16.2.10",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "sass": "^1.101.0",
+        "zod": "^4.4.3",
+        "zustand": "^5.0.14"
+      }
+    }
+  },
   "scripts": {
     "apps": "bun scripts/apps/index.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.2",
-    "@clack/prompts": "^1.7.0",
-    "@tauri-apps/cli": "^2.11.4",
-    "@types/node": "^26.1.0",
-    "turbo": "^2.10.3"
+    "@biomejs/biome": "catalog:tooling",
+    "@clack/prompts": "catalog:tooling",
+    "@tauri-apps/cli": "catalog:tauri",
+    "@types/node": "catalog:tooling",
+    "turbo": "catalog:tooling"
   }
 }

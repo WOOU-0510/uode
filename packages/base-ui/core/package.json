@@ -13,17 +13,20 @@
       "default": "./dist/index.mjs"
     }
   },
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "build": "bun run clean && tsdown"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "tsdown": "^0.21.6",
-    "typescript": "^6.0.2"
+    "@types/bun": "catalog:tooling",
+    "tsdown": "catalog:bundler",
+    "typescript": "catalog:tooling"
   },
   "dependencies": {
-    "@chenglou/pretext": "^0.0.4"
+    "@chenglou/pretext": "catalog:ui"
   }
 }
