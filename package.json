@@ -19,8 +19,8 @@
     "t:g": "turbo run t:g --filter=web"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.11",
-    "@tauri-apps/cli": "^2",
+    "@biomejs/biome": "2.5.2",
+    "@tauri-apps/cli": "^2.11.4",
     "turbo": "^2.10.3"
   }
 }
