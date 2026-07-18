@@ -6,10 +6,7 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "packages/api",
-      "packages/form",
-      "packages/storage",
-      "packages/validation",
+      "packages/*",
       "packages/base-ui/*"
     ],
     "catalogs": {
@@ -68,11 +65,10 @@
     }
   },
   "scripts": {
-    "apps": "bun scripts/apps/index.ts"
+    "cli": "bun run --filter @uode/cli start"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:tooling",
-    "@clack/prompts": "catalog:tooling",
     "@tauri-apps/cli": "catalog:tauri",
     "@types/node": "catalog:tooling",
     "turbo": "catalog:tooling"

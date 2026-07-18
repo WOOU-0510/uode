@@ -6,7 +6,6 @@
       "name": "uode",
       "devDependencies": {
         "@biomejs/biome": "catalog:tooling",
-        "@clack/prompts": "catalog:tooling",
         "@tauri-apps/cli": "catalog:tauri",
         "@types/node": "catalog:tooling",
         "turbo": "catalog:tooling",
@@ -65,6 +64,10 @@
         "typescript": "catalog:tooling",
       },
     },
+    "packages/assets": {
+      "name": "@uode/assets",
+      "version": "0.1.0",
+    },
     "packages/base-ui/core": {
       "name": "@uode/base-ui-core",
       "version": "0.1.0",
@@ -102,23 +105,40 @@
         "react-dom": "catalog:peer",
       },
     },
-    "packages/form": {
-      "name": "@uode/form",
+    "packages/cli": {
+      "name": "@uode/cli",
       "version": "0.1.0",
-      "devDependencies": {
-        "@types/bun": "catalog:tooling",
-        "tsdown": "catalog:bundler",
-        "typescript": "catalog:tooling",
+      "dependencies": {
+        "@clack/prompts": "catalog:tooling",
       },
     },
-    "packages/storage": {
-      "name": "@uode/storage",
+    "packages/config": {
+      "name": "@uode/config",
       "version": "0.1.0",
-      "devDependencies": {
-        "@types/bun": "catalog:tooling",
-        "tsdown": "catalog:bundler",
-        "typescript": "catalog:tooling",
-      },
+    },
+    "packages/constants": {
+      "name": "@uode/constants",
+      "version": "0.1.0",
+    },
+    "packages/hooks": {
+      "name": "@uode/hooks",
+      "version": "0.1.0",
+    },
+    "packages/store": {
+      "name": "@uode/store",
+      "version": "0.1.0",
+    },
+    "packages/styles": {
+      "name": "@uode/styles",
+      "version": "0.1.0",
+    },
+    "packages/types": {
+      "name": "@uode/types",
+      "version": "0.1.0",
+    },
+    "packages/utils": {
+      "name": "@uode/utils",
+      "version": "0.1.0",
     },
     "packages/validation": {
       "name": "@uode/validation",
@@ -506,13 +526,27 @@
 
     "@uode/api": ["@uode/api@workspace:packages/api"],
 
+    "@uode/assets": ["@uode/assets@workspace:packages/assets"],
+
     "@uode/base-ui-core": ["@uode/base-ui-core@workspace:packages/base-ui/core"],
 
     "@uode/base-ui-react": ["@uode/base-ui-react@workspace:packages/base-ui/react"],
 
-    "@uode/form": ["@uode/form@workspace:packages/form"],
+    "@uode/cli": ["@uode/cli@workspace:packages/cli"],
 
-    "@uode/storage": ["@uode/storage@workspace:packages/storage"],
+    "@uode/config": ["@uode/config@workspace:packages/config"],
+
+    "@uode/constants": ["@uode/constants@workspace:packages/constants"],
+
+    "@uode/hooks": ["@uode/hooks@workspace:packages/hooks"],
+
+    "@uode/store": ["@uode/store@workspace:packages/store"],
+
+    "@uode/styles": ["@uode/styles@workspace:packages/styles"],
+
+    "@uode/types": ["@uode/types@workspace:packages/types"],
+
+    "@uode/utils": ["@uode/utils@workspace:packages/utils"],
 
     "@uode/validation": ["@uode/validation@workspace:packages/validation"],
 
