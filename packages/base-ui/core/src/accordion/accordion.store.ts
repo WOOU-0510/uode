@@ -1,0 +1,110 @@
+import { createStoreCore, type StoreCore } from "../store";
+
+export type AccordionType = "single" | "multiple";
+
+export type AccordionSnapshot = {
+  readonly expandedValues: readonly string[];
+};
+
+export type AccordionStoreOptions = {
+  readonly type?: AccordionType;
+  readonly initialExpandedValues?: readonly string[];
+};
+
+export const normalizeAccordionExpandedValues = (
+  type: AccordionType,
+  values: readonly string[],
+): readonly string[] => {
+  switch (type) {
+    case "single":
+      return values.slice(0, 1);
+    case "multiple":
+      return [...new Set(values)];
+  }
+};
+
+export const getAccordionExpandedValuesAfterExpand = (
+  type: AccordionType,
+  values: readonly string[],
+  value: string,
+): readonly string[] => {
+  if (values.includes(value)) return values;
+  return normalizeAccordionExpandedValues(type, [...values, value]);
+};
+
+export const getAccordionExpandedValuesAfterCollapse = (
+  values: readonly string[],
+  value: string,
+): readonly string[] =>
+  values.filter((expandedValue) => expandedValue !== value);
+
+export type AccordionStore = {
+  readonly getSnapshot: () => AccordionSnapshot;
+  readonly subscribe: StoreCore<AccordionSnapshot>["subscribe"];
+  readonly setExpandedValues: (values: readonly string[]) => void;
+  readonly expand: (value: string) => void;
+  readonly collapse: (value: string) => void;
+  readonly toggle: (value: string) => void;
+  readonly isExpanded: (value: string) => boolean;
+};
+
+export const createAccordionStore = (
+  options: AccordionStoreOptions = {},
+): AccordionStore => {
+  const type = options.type ?? "single";
+  const initialExpandedValues = options.initialExpandedValues ?? [];
+  const initialSnapshot: AccordionSnapshot = {
+    expandedValues: normalizeAccordionExpandedValues(
+      type,
+      initialExpandedValues,
+    ),
+  };
+  const core = createStoreCore(initialSnapshot);
+
+  const setExpandedValues = (values: readonly string[]) => {
+    const expandedValues = normalizeAccordionExpandedValues(type, values);
+    core.updateSnapshot((snapshot) => {
+      const unchanged =
+        snapshot.expandedValues.length === expandedValues.length &&
+        snapshot.expandedValues.every(
+          (expandedValue, index) => expandedValue === expandedValues[index],
+        );
+      if (unchanged) return snapshot;
+      return { expandedValues };
+    });
+  };
+
+  const expand = (value: string) => {
+    const snapshot = core.getSnapshot();
+    setExpandedValues(
+      getAccordionExpandedValuesAfterExpand(
+        type,
+        snapshot.expandedValues,
+        value,
+      ),
+    );
+  };
+
+  const collapse = (value: string) => {
+    const snapshot = core.getSnapshot();
+    setExpandedValues(
+      getAccordionExpandedValuesAfterCollapse(snapshot.expandedValues, value),
+    );
+  };
+
+  return {
+    getSnapshot: core.getSnapshot,
+    subscribe: core.subscribe,
+    setExpandedValues,
+    expand,
+    collapse,
+    toggle: (value) => {
+      if (core.getSnapshot().expandedValues.includes(value)) {
+        collapse(value);
+        return;
+      }
+      expand(value);
+    },
+    isExpanded: (value) => core.getSnapshot().expandedValues.includes(value),
+  };
+};

@@ -5,6 +5,16 @@ export {
   type ButtonStoreOptions,
 } from "./button";
 export {
+  createAccordionStore,
+  getAccordionExpandedValuesAfterCollapse,
+  getAccordionExpandedValuesAfterExpand,
+  normalizeAccordionExpandedValues,
+  type AccordionSnapshot,
+  type AccordionStore,
+  type AccordionStoreOptions,
+  type AccordionType,
+} from "./accordion";
+export {
   createStoreCore,
   type StoreCore,
   type StoreListener,

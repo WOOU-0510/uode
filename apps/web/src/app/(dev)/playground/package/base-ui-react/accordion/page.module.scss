@@ -1,0 +1,134 @@
+.page {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+}
+
+.pageHeader {
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--playground-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+}
+
+.section {
+  border: 1px solid var(--playground-border);
+  border-radius: 0.6rem;
+  padding: 0.85rem;
+  background: var(--playground-card);
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  > p {
+    margin: 0.35rem 0 0;
+    color: var(--playground-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.accordion {
+  margin-top: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.45rem;
+}
+
+.nestedAccordion {
+  margin: 0.7rem 0;
+  overflow: hidden;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.35rem;
+}
+
+.nestedAccordion h4 {
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+
+  button {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--playground-border);
+    border-radius: 0.35rem;
+    background: var(--playground-code-bg);
+    color: inherit;
+    font: inherit;
+  }
+}
+
+.controlledAccordion {
+  --uode-accordion-content-duration: 360ms;
+  --uode-accordion-content-easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.item + .item {
+  border-top: 1px solid var(--playground-border);
+}
+
+.item h3 {
+  margin: 0;
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  background: var(--playground-code-bg);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+
+  &::after {
+    content: "+";
+    color: var(--playground-muted);
+    font-size: 1.1rem;
+  }
+
+  &[aria-expanded="true"]::after {
+    content: "−";
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+.content {
+  padding: 0 0.75rem;
+  background: var(--playground-card);
+
+  p {
+    margin: 0;
+    padding: 0.7rem 0;
+    color: var(--playground-muted);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+}

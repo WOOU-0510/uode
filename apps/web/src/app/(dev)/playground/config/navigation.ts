@@ -47,6 +47,11 @@ export const NAV_ENTRIES: readonly PlaygroundNavEntry[] = [
         items: [
           {
             kind: "link",
+            href: "/playground/package/base-ui-react/accordion",
+            label: "accordion",
+          },
+          {
+            kind: "link",
             href: "/playground/package/base-ui-react/icon",
             label: "icon",
           },
