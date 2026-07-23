@@ -11,7 +11,7 @@ type PopoverBackdropComponentProps = PopoverBackdropProps;
 
 export const PopoverBackdrop = (props: PopoverBackdropComponentProps) => {
   const { className, ...rest } = props;
-  const context = React.useContext(PopoverContext);
+  const context = React.use(PopoverContext);
   if (context === null) {
     throw new Error(
       "Popover.Backdrop는 Popover.Root 내부에서만 사용할 수 있습니다."

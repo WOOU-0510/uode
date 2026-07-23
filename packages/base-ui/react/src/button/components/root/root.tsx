@@ -86,6 +86,6 @@ export const ButtonRoot = (props: ButtonRootComponentProps) => {
   );
 
   return (
-    <ButtonContext.Provider value={value}>{children}</ButtonContext.Provider>
+    <ButtonContext value={value}>{children}</ButtonContext>
   );
 };

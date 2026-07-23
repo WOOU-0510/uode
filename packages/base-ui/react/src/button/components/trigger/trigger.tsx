@@ -1,18 +1,16 @@
 import * as React from "react";
 import { ButtonContext } from "../../button.context";
 
-export type ButtonTriggerProps = React.ComponentPropsWithoutRef<"button"> & {
+export type ButtonTriggerProps = React.ComponentPropsWithRef<"button"> & {
   /** true이면 클릭 시 `togglePressed`를 호출하고 `aria-pressed`를 노출합니다. */
   toggle?: boolean;
 };
 
 type ButtonTriggerComponentProps = ButtonTriggerProps;
 
-export const ButtonTrigger = React.forwardRef<
-  HTMLButtonElement,
-  ButtonTriggerComponentProps
->((props, forwardedRef) => {
+export const ButtonTrigger = (props: ButtonTriggerComponentProps) => {
   const {
+    ref,
     toggle = false,
     type = "button",
     disabled: disabledFromProps,
@@ -22,7 +20,7 @@ export const ButtonTrigger = React.forwardRef<
     ...rest
   } = props;
 
-  const context = React.useContext(ButtonContext);
+  const context = React.use(ButtonContext);
   if (context === null) {
     throw new Error(
       "Button.Trigger는 Button.Root 내부에서만 사용할 수 있습니다.",
@@ -51,7 +49,7 @@ export const ButtonTrigger = React.forwardRef<
   return (
     <button
       {...rest}
-      ref={forwardedRef}
+      ref={ref}
       type={type}
       className={className}
       disabled={disabled}
@@ -59,6 +57,4 @@ export const ButtonTrigger = React.forwardRef<
       onClick={handleClick}
     />
   );
-});
-
-ButtonTrigger.displayName = "ButtonTrigger";
+};

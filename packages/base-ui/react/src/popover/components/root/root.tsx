@@ -71,6 +71,6 @@ export const PopoverRoot = (props: PopoverRootComponentProps) => {
   );
 
   return (
-    <PopoverContext.Provider value={value}>{children}</PopoverContext.Provider>
+    <PopoverContext value={value}>{children}</PopoverContext>
   );
 };
