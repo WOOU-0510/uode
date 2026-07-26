@@ -1,25 +1,14 @@
 import * as React from "react";
-import {
-  createButtonStore,
-  type ButtonSnapshot,
-  type ButtonStore,
-} from "@uode/base-ui-core";
 import { ButtonContext } from "../../button.context";
+import { useButtonState } from "../../button.hook";
 import type { ButtonContextValue, ButtonController } from "../../button.types";
-
-/** `getServerSnapshot`은 매번 동일한 참조를 돌려줘야 합니다. */
-const serverButtonSnapshot: ButtonSnapshot = {
-  disabled: false,
-  pressed: false,
-};
-
-const getServerButtonSnapshot = (): ButtonSnapshot => serverButtonSnapshot;
 
 export type ButtonRootProps = {
   children: React.ReactNode;
   defaultDisabled?: boolean;
   defaultPressed?: boolean;
   disabled?: boolean;
+  onPressedChange?: (pressed: boolean) => void;
   pressed?: boolean;
 };
 
@@ -31,51 +20,48 @@ export const ButtonRoot = (props: ButtonRootComponentProps) => {
     defaultDisabled,
     defaultPressed,
     disabled: disabledProp,
+    onPressedChange,
     pressed: pressedProp,
   } = props;
 
-  const storeRef = React.useRef<ButtonStore | null>(null);
-  if (storeRef.current === null) {
-    const initialDisabled =
-      disabledProp !== undefined
-        ? disabledProp
-        : (defaultDisabled ?? false);
-    const initialPressed =
-      pressedProp !== undefined ? pressedProp : (defaultPressed ?? false);
-    storeRef.current = createButtonStore({
-      initialDisabled,
-      initialPressed,
-    });
-  }
-  const store = storeRef.current;
+  const internalState = useButtonState({
+    defaultDisabled,
+    defaultPressed,
+  });
+  const disabled = disabledProp ?? internalState.disabled;
+  const pressed = pressedProp ?? internalState.pressed;
 
-  React.useEffect(() => {
-    if (disabledProp !== undefined) {
-      store.setDisabled(disabledProp);
-    }
-  }, [disabledProp, store]);
-
-  React.useEffect(() => {
-    if (pressedProp !== undefined) {
-      store.setPressed(pressedProp);
-    }
-  }, [pressedProp, store]);
-
-  const snapshot = React.useSyncExternalStore(
-    store.subscribe,
-    store.getSnapshot,
-    getServerButtonSnapshot,
+  const setDisabled = React.useCallback(
+    (nextDisabled: boolean) => {
+      if (disabledProp === undefined) {
+        internalState.setDisabled(nextDisabled);
+      }
+    },
+    [disabledProp, internalState],
+  );
+  const setPressed = React.useCallback(
+    (nextPressed: boolean) => {
+      if (pressedProp === undefined) {
+        internalState.setPressed(nextPressed);
+      }
+      onPressedChange?.(nextPressed);
+    },
+    [internalState, onPressedChange, pressedProp],
   );
 
   const controller = React.useMemo(
     (): ButtonController => ({
-      disabled: snapshot.disabled,
-      pressed: snapshot.pressed,
-      setDisabled: store.setDisabled,
-      setPressed: store.setPressed,
-      togglePressed: store.togglePressed,
+      disabled,
+      pressed,
+      setDisabled,
+      setPressed,
+      togglePressed: () => {
+        if (!disabled) {
+          setPressed(!pressed);
+        }
+      },
     }),
-    [snapshot.disabled, snapshot.pressed, store],
+    [disabled, pressed, setDisabled, setPressed],
   );
 
   const value = React.useMemo(
@@ -85,7 +71,5 @@ export const ButtonRoot = (props: ButtonRootComponentProps) => {
     [controller],
   );
 
-  return (
-    <ButtonContext value={value}>{children}</ButtonContext>
-  );
+  return <ButtonContext value={value}>{children}</ButtonContext>;
 };

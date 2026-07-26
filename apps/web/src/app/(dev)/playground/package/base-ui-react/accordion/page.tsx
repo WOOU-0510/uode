@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Accordion } from "@uode/base-ui-react";
 import styles from "./page.module.scss";
 
@@ -43,8 +42,10 @@ const BaseUiReactAccordionPlaygroundPage = (
   props: BaseUiReactAccordionPlaygroundPageProps,
 ) => {
   const {} = props;
-  const [controlledExpandedValues, setControlledExpandedValues] =
-    React.useState<readonly string[]>(["first"]);
+  const controlledState = Accordion.useState({
+    type: "multiple",
+    defaultExpandedValues: ["first"],
+  });
 
   return (
     <main className={styles.page}>
@@ -184,27 +185,32 @@ const BaseUiReactAccordionPlaygroundPage = (
       </section>
 
       <section className={styles.section}>
-        <h2>Controlled motion</h2>
+        <h2>외부 상태 hook + motion</h2>
         <p>
-          외부 상태로 열림을 제어하며, CSS 변수로 기본 애니메이션의 속도와
-          easing을 바꿉니다.
+          <code>Accordion.useState</code>로 core store를 구독해 Root에 주입하고,
+          CSS 변수로 애니메이션 속도와 easing을 바꿉니다.
         </p>
         <div className={styles.controls}>
           <button
             type="button"
-            onClick={() => setControlledExpandedValues(["first", "second"])}
+            onClick={() =>
+              controlledState.setExpandedValues(["first", "second"])
+            }
           >
             Expand all
           </button>
-          <button type="button" onClick={() => setControlledExpandedValues([])}>
+          <button
+            type="button"
+            onClick={() => controlledState.setExpandedValues([])}
+          >
             Collapse all
           </button>
         </div>
         <Accordion.Root
           className={`${styles.accordion} ${styles.controlledAccordion}`}
           type="multiple"
-          expandedValues={controlledExpandedValues}
-          onExpandedValuesChange={setControlledExpandedValues}
+          expandedValues={controlledState.expandedValues}
+          onExpandedValuesChange={controlledState.setExpandedValues}
         >
           {MULTIPLE_ITEMS.map((item) => (
             <Accordion.Item

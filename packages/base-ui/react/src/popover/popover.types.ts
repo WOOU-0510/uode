@@ -13,6 +13,15 @@ export type PopoverController = {
   closeAllPanels: () => void;
 };
 
+export type PopoverStateOptions = {
+  readonly defaultEntries?: ReadonlyArray<PopoverPanelEntry>;
+  readonly idPrefix?: string;
+};
+
+export type PopoverState = PopoverController & {
+  readonly setEntries: (entries: ReadonlyArray<PopoverPanelEntry>) => void;
+};
+
 export type PopoverContextValue = {
   rootRef: React.RefObject<HTMLDivElement | null>;
   controller: PopoverController;

@@ -28,8 +28,7 @@ export const ButtonTrigger = (props: ButtonTriggerComponentProps) => {
   }
 
   const { controller } = context;
-  const disabled =
-    controller.disabled || disabledFromProps === true;
+  const disabled = controller.disabled || disabledFromProps === true;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
@@ -39,7 +38,7 @@ export const ButtonTrigger = (props: ButtonTriggerComponentProps) => {
     }
   };
 
-  let ariaPressed: boolean | undefined;
+  let ariaPressed: React.AriaAttributes["aria-pressed"];
   if (ariaPressedProp !== undefined) {
     ariaPressed = ariaPressedProp;
   } else if (toggle) {

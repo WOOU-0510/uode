@@ -6,6 +6,13 @@ export type ButtonController = {
   togglePressed: () => void;
 };
 
+export type ButtonStateOptions = {
+  readonly defaultDisabled?: boolean;
+  readonly defaultPressed?: boolean;
+};
+
+export type ButtonState = ButtonController;
+
 export type ButtonContextValue = {
   controller: ButtonController;
 };

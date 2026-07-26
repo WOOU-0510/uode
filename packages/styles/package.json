@@ -1,5 +1,11 @@
 {
   "name": "@uode/styles",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "exports": {
+    "./animation": {
+      "sass": "./src/animation/_index.scss",
+      "default": "./src/animation/_index.scss"
+    }
+  }
 }

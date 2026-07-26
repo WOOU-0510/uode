@@ -1,0 +1,138 @@
+@keyframes uode-fade-in {
+  from {
+    opacity: var(--uode-fade-from, 0);
+  }
+
+  to {
+    opacity: var(--uode-fade-to, 1);
+  }
+}
+
+@keyframes uode-fade-out {
+  from {
+    opacity: var(--uode-fade-from, 1);
+  }
+
+  to {
+    opacity: var(--uode-fade-to, 0);
+  }
+}
+
+@keyframes uode-slide-in {
+  from {
+    transform: translate3d(
+      var(--uode-slide-x, 0),
+      var(--uode-slide-y, 0),
+      0
+    );
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes uode-slide-out {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      var(--uode-slide-x, 0),
+      var(--uode-slide-y, 0),
+      0
+    );
+  }
+}
+
+@mixin motion(
+  $name,
+  $duration: 200ms,
+  $timing-function: ease-out,
+  $delay: 0ms,
+  $fill-mode: both
+) {
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-timing-function: $timing-function;
+  animation-delay: $delay;
+  animation-fill-mode: $fill-mode;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}
+
+@mixin fade-in(
+  $duration: 200ms,
+  $timing-function: ease-out,
+  $delay: 0ms,
+  $from: 0,
+  $to: 1
+) {
+  --uode-fade-from: #{$from};
+  --uode-fade-to: #{$to};
+
+  @include motion(
+    uode-fade-in,
+    $duration,
+    $timing-function,
+    $delay
+  );
+}
+
+@mixin fade-out(
+  $duration: 160ms,
+  $timing-function: ease-in,
+  $delay: 0ms,
+  $from: 1,
+  $to: 0
+) {
+  --uode-fade-from: #{$from};
+  --uode-fade-to: #{$to};
+
+  @include motion(
+    uode-fade-out,
+    $duration,
+    $timing-function,
+    $delay
+  );
+}
+
+@mixin slide-in(
+  $x: 0,
+  $y: 1rem,
+  $duration: 240ms,
+  $timing-function: ease-out,
+  $delay: 0ms
+) {
+  --uode-slide-x: #{$x};
+  --uode-slide-y: #{$y};
+
+  @include motion(
+    uode-slide-in,
+    $duration,
+    $timing-function,
+    $delay
+  );
+}
+
+@mixin slide-out(
+  $x: 0,
+  $y: 1rem,
+  $duration: 200ms,
+  $timing-function: ease-in,
+  $delay: 0ms
+) {
+  --uode-slide-x: #{$x};
+  --uode-slide-y: #{$y};
+
+  @include motion(
+    uode-slide-out,
+    $duration,
+    $timing-function,
+    $delay
+  );
+}

@@ -1,4 +1,10 @@
 import { createStoreCore, type StoreCore } from "../store";
+import {
+  addUniqueValue,
+  areOrderedValuesEqual,
+  getUniqueValues,
+  removeValue,
+} from "../collection";
 
 export type AccordionType = "single" | "multiple";
 
@@ -19,7 +25,7 @@ export const normalizeAccordionExpandedValues = (
     case "single":
       return values.slice(0, 1);
     case "multiple":
-      return [...new Set(values)];
+      return getUniqueValues(values);
   }
 };
 
@@ -28,15 +34,14 @@ export const getAccordionExpandedValuesAfterExpand = (
   values: readonly string[],
   value: string,
 ): readonly string[] => {
-  if (values.includes(value)) return values;
-  return normalizeAccordionExpandedValues(type, [...values, value]);
+  if (type === "single") return [value];
+  return addUniqueValue(values, value);
 };
 
 export const getAccordionExpandedValuesAfterCollapse = (
   values: readonly string[],
   value: string,
-): readonly string[] =>
-  values.filter((expandedValue) => expandedValue !== value);
+): readonly string[] => removeValue(values, value);
 
 export type AccordionStore = {
   readonly getSnapshot: () => AccordionSnapshot;
@@ -64,11 +69,10 @@ export const createAccordionStore = (
   const setExpandedValues = (values: readonly string[]) => {
     const expandedValues = normalizeAccordionExpandedValues(type, values);
     core.updateSnapshot((snapshot) => {
-      const unchanged =
-        snapshot.expandedValues.length === expandedValues.length &&
-        snapshot.expandedValues.every(
-          (expandedValue, index) => expandedValue === expandedValues[index],
-        );
+      const unchanged = areOrderedValuesEqual(
+        snapshot.expandedValues,
+        expandedValues,
+      );
       if (unchanged) return snapshot;
       return { expandedValues };
     });

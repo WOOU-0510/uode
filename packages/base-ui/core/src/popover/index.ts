@@ -1,4 +1,9 @@
-export { createPopoverStore } from "./popover.store";
+export {
+  createPopoverPanelEntry,
+  createPopoverStore,
+  getPopoverEntriesAfterCloseTop,
+  getPopoverEntriesAfterOpen,
+} from "./popover.store";
 export type {
   PopoverOpenMode,
   PopoverPanelEntry,

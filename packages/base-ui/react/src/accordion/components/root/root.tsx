@@ -1,21 +1,19 @@
 import * as React from "react";
 import {
-  createAccordionStore,
   getAccordionExpandedValuesAfterCollapse,
   getAccordionExpandedValuesAfterExpand,
   normalizeAccordionExpandedValues,
-  type AccordionStore,
-  type AccordionStoreOptions,
   type AccordionType,
 } from "@uode/base-ui-core";
 import { AccordionContext } from "../../accordion.context";
+import { useAccordionState } from "../../accordion.hook";
 import type {
   AccordionContextValue,
   AccordionController,
 } from "../../accordion.types";
 
 export type AccordionRootProps = Omit<
-  React.ComponentPropsWithoutRef<"div">,
+  React.ComponentPropsWithRef<"div">,
   "children"
 > & {
   readonly children: React.ReactNode;
@@ -36,23 +34,13 @@ export const AccordionRoot = (props: AccordionRootComponentProps) => {
     onExpandedValuesChange,
     ...rest
   } = props;
-  const storeRef = React.useRef<AccordionStore | null>(null);
-  if (storeRef.current === null) {
-    const options: AccordionStoreOptions =
-      defaultExpandedValues === undefined
-        ? { type }
-        : { type, initialExpandedValues: defaultExpandedValues };
-    storeRef.current = createAccordionStore(options);
-  }
-  const store = storeRef.current;
-  const snapshot = React.useSyncExternalStore(
-    store.subscribe,
-    store.getSnapshot,
-    store.getSnapshot,
-  );
+  const internalState = useAccordionState({
+    type,
+    defaultExpandedValues,
+  });
   const expandedValues =
     expandedValuesProp === undefined
-      ? snapshot.expandedValues
+      ? normalizeAccordionExpandedValues(type, internalState.expandedValues)
       : normalizeAccordionExpandedValues(type, expandedValuesProp);
   const setExpandedValues = React.useCallback(
     (nextExpandedValues: readonly string[]) => {
@@ -68,15 +56,22 @@ export const AccordionRoot = (props: AccordionRootComponentProps) => {
         );
       if (unchanged) return;
       if (expandedValuesProp === undefined) {
-        store.setExpandedValues(normalizedExpandedValues);
+        internalState.setExpandedValues(normalizedExpandedValues);
       }
       onExpandedValuesChange?.(normalizedExpandedValues);
     },
-    [expandedValues, expandedValuesProp, onExpandedValuesChange, store, type],
+    [
+      expandedValues,
+      expandedValuesProp,
+      internalState,
+      onExpandedValuesChange,
+      type,
+    ],
   );
   const controller = React.useMemo(
     (): AccordionController => ({
       expandedValues,
+      setExpandedValues,
       expand: (value) => {
         setExpandedValues(
           getAccordionExpandedValuesAfterExpand(type, expandedValues, value),

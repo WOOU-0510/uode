@@ -4,7 +4,7 @@ import { AccordionItemContext } from "../../accordion.item.context";
 import type { AccordionItemContextValue } from "../../accordion.types";
 
 export type AccordionItemProps = Omit<
-  React.ComponentPropsWithoutRef<"div">,
+  React.ComponentPropsWithRef<"div">,
   "children"
 > & {
   readonly children: React.ReactNode;

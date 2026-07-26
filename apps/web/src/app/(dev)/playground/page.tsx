@@ -36,6 +36,11 @@ const HUB_ITEMS = [
     description:
       "base-ui-react의 Button 컴파운드 API(토글, 비활성, 제어 props)를 확인합니다.",
   },
+  {
+    href: "/playground/package/base-ui-react/treeView",
+    title: "package / base-ui-react / treeView",
+    description: "노트 폴더 트리의 선택·확장·키보드 탐색을 확인합니다.",
+  },
 ] satisfies readonly {
   href: PlaygroundNavHref;
   title: string;

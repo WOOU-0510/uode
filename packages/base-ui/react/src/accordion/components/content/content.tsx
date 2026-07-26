@@ -7,7 +7,7 @@ import styles from "./content.module.scss";
 const cn = cx.bind(styles);
 
 export type AccordionContentProps = Omit<
-  React.ComponentPropsWithoutRef<"section">,
+  React.ComponentPropsWithRef<"section">,
   "aria-labelledby" | "hidden" | "id"
 >;
 

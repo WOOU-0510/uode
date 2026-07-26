@@ -21,6 +21,7 @@
     "@tauri-apps/plugin-updater": "catalog:tauri",
     "@uode/base-ui-core": "workspace:*",
     "@uode/base-ui-react": "workspace:*",
+    "@uode/styles": "workspace:*",
     "@uode/validation": "workspace:*",
     "classnames": "catalog:web",
     "ky": "catalog:web",

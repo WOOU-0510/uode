@@ -1,7 +1,5 @@
-import {
-  createStoreCore,
-  type StoreCore,
-} from "../store";
+import { areOrderedValuesEqual } from "../collection";
+import { createStoreCore, type StoreCore } from "../store";
 
 /** 패널을 교체할지 스택에 쌓을지 결정합니다. */
 export type PopoverOpenMode = "replace" | "stack";
@@ -27,6 +25,7 @@ export type PopoverStoreOptions = {
 export type PopoverStore = {
   getSnapshot: () => PopoverSnapshot;
   subscribe: StoreCore<PopoverSnapshot>["subscribe"];
+  setEntries: (entries: ReadonlyArray<PopoverPanelEntry>) => void;
   openPanel: (
     key: string,
     params: unknown,
@@ -39,38 +38,62 @@ export type PopoverStore = {
 const createEntryId = (prefix: string, sequence: number) =>
   `${prefix}-${sequence}`;
 
+export const createPopoverPanelEntry = (
+  idPrefix: string,
+  sequence: number,
+  key: string,
+  params: unknown,
+): PopoverPanelEntry => ({
+  id: createEntryId(idPrefix, sequence),
+  key,
+  params,
+});
+
+export const getPopoverEntriesAfterOpen = (
+  entries: ReadonlyArray<PopoverPanelEntry>,
+  entry: PopoverPanelEntry,
+  mode: PopoverOpenMode,
+): ReadonlyArray<PopoverPanelEntry> =>
+  mode === "stack" ? [...entries, entry] : [entry];
+
+export const getPopoverEntriesAfterCloseTop = (
+  entries: ReadonlyArray<PopoverPanelEntry>,
+): ReadonlyArray<PopoverPanelEntry> => entries.slice(0, -1);
+
 export function createPopoverStore(
   options: PopoverStoreOptions,
   initialSnapshot: PopoverSnapshot = { entries: [] },
 ): PopoverStore {
   const core = createStoreCore<PopoverSnapshot>(initialSnapshot);
   let sequence = 0;
+  const setEntries = (entries: ReadonlyArray<PopoverPanelEntry>) => {
+    core.updateSnapshot((snapshot) =>
+      areOrderedValuesEqual(snapshot.entries, entries) ? snapshot : { entries },
+    );
+  };
 
   return {
     getSnapshot: core.getSnapshot,
     subscribe: core.subscribe,
+    setEntries,
     openPanel: (key, params, opts) => {
       const mode = opts?.mode ?? "replace";
       sequence += 1;
-      const entry: PopoverPanelEntry = {
-        id: createEntryId(options.idPrefix, sequence),
+      const entry = createPopoverPanelEntry(
+        options.idPrefix,
+        sequence,
         key,
         params,
-      };
-      core.updateSnapshot((prev) => {
-        if (mode === "stack") {
-          return { entries: [...prev.entries, entry] };
-        }
-        return { entries: [entry] };
-      });
+      );
+      setEntries(
+        getPopoverEntriesAfterOpen(core.getSnapshot().entries, entry, mode),
+      );
     },
     closeTopPanel: () => {
-      core.updateSnapshot((prev) => ({
-        entries: prev.entries.slice(0, -1),
-      }));
+      setEntries(getPopoverEntriesAfterCloseTop(core.getSnapshot().entries));
     },
     closeAllPanels: () => {
-      core.setSnapshot({ entries: [] });
+      setEntries([]);
     },
   };
 }

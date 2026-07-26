@@ -11,3 +11,5 @@ export * from "./icons";
 export * from "./popover";
 export type * from "./popover";
 export * from "./pretext";
+export * from "./treeView";
+export type * from "./treeView";

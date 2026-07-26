@@ -1,70 +1,414 @@
+@use "pkg:@uode/styles/animation" as animation;
+
 .page {
-  width: 100%;
+    display: grid;
+    width: 100%;
+    gap: 1rem;
 }
 
 .pageHeader {
-  margin-bottom: 1rem;
+    h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.4rem;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+    }
 
-  h1 {
-    margin: 0 0 0.5rem;
-    font-size: 1.4rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-  }
-
-  p {
-    margin: 0;
-    color: var(--playground-muted);
-    line-height: 1.55;
-    font-size: 0.95rem;
-  }
+    p {
+        margin: 0;
+        color: var(--playground-muted);
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
 }
 
 .section {
-  border: 1px solid var(--playground-border);
-  border-radius: 0.6rem;
-  padding: 0.85rem;
-  background: var(--playground-card);
+    padding: 0.9rem;
+    border: 1px solid var(--playground-border);
+    border-radius: 0.65rem;
+    background: var(--playground-card);
 
-  h2 {
-    margin: 0;
-    font-size: 1rem;
-  }
+    h2 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    > p {
+        margin: 0.35rem 0 0;
+        color: var(--playground-muted);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+}
+
+.exampleBody {
+    margin-top: 0.75rem;
 }
 
 .actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
 }
 
-.button {
-  padding: 0.4rem 0.7rem;
-  border-radius: 0.4rem;
-  border: 1px solid var(--playground-border);
-  background: var(--playground-code-bg);
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
+.button,
+.primaryButton,
+.dangerButton {
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--playground-border);
+    border-radius: 0.4rem;
+    background: var(--playground-code-bg);
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
 
-  &:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    &:focus-visible {
+        outline: 2px solid currentcolor;
+        outline-offset: 2px;
+    }
 }
 
-.panel {
-  padding: 1rem;
+.primaryButton {
+    border-color: transparent;
+    background: #3159d8;
+    color: #fff;
 }
 
-.panelTitle {
-  margin: 0 0 0.35rem;
-  font-size: 1.05rem;
+.dangerButton {
+    border-color: color-mix(in srgb, #dc4c4c 45%, var(--playground-border));
+    color: #d74747;
 }
 
-.panelSub {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.8;
+.backdrop,
+.animatedBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(10 15 25 / 42%);
+}
+
+.animatedBackdrop,
+.sheetPopover {
+    --sheet-enter-duration: 320ms;
+    --sheet-exit-duration: 220ms;
+    --sheet-enter-timing: cubic-bezier(0.22, 1, 0.36, 1);
+    --sheet-exit-timing: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.animatedBackdrop[data-state="open"] {
+    @include animation.fade-in(
+        $duration: var(--sheet-enter-duration),
+        $timing-function: var(--sheet-enter-timing),
+        $from: 0,
+        $to: 1
+    );
+}
+
+.animatedBackdrop[data-state="closed"] {
+    @include animation.fade-out(
+        $duration: var(--sheet-exit-duration),
+        $timing-function: var(--sheet-exit-timing)
+    );
+}
+
+.cardPopover,
+.workspacePopover {
+    width: min(26rem, calc(100vw - 2rem));
+    padding: 0;
+    border: 1px solid color-mix(in srgb, currentcolor 16%, transparent);
+    border-radius: 0.8rem;
+    background: var(--playground-card);
+    color: inherit;
+    box-shadow: 0 1.2rem 4rem rgb(0 0 0 / 24%);
+}
+
+.positionedPopover {
+    position: fixed;
+    width: min(28rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, currentcolor 16%, transparent);
+    background: var(--playground-card);
+    color: inherit;
+    box-shadow: 0 1.2rem 4rem rgb(0 0 0 / 24%);
+
+    &[data-position="center"] {
+        inset: 50% auto auto 50%;
+        margin: 0;
+        border-radius: 0.8rem;
+        transform: translate(-50%, -50%);
+    }
+
+    &[data-position="top-right"] {
+        inset: 1.25rem 1.25rem auto auto;
+        width: min(22rem, calc(100vw - 2.5rem));
+        margin: 0;
+        border-radius: 0.7rem;
+    }
+}
+
+.positionPanel {
+    padding: 1.1rem;
+
+    h3 {
+        margin: 0.2rem 0 0.35rem;
+    }
+
+    p {
+        margin: 0 0 1rem;
+        color: var(--playground-muted);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+}
+
+.sheetActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+
+    button {
+        width: 100%;
+    }
+}
+
+.sheetPopover {
+    position: fixed;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, currentcolor 16%, transparent);
+    background: var(--playground-card);
+    color: inherit;
+    box-shadow: 0 1.2rem 4rem rgb(0 0 0 / 24%);
+    will-change: transform;
+
+    &[data-direction="top"],
+    &[data-direction="bottom"] {
+        right: 0;
+        left: 0;
+        width: min(42rem, 100vw);
+        max-height: min(70vh, 30rem);
+        margin-inline: auto;
+    }
+
+    &[data-direction="top"] {
+        top: 0;
+        bottom: auto;
+        border-top: 0;
+        border-radius: 0 0 1rem 1rem;
+    }
+
+    &[data-direction="right"] {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        width: min(26rem, calc(100vw - 2rem));
+        height: 100vh;
+        max-height: 100vh;
+        border-right: 0;
+        border-radius: 1rem 0 0 1rem;
+    }
+
+    &[data-direction="bottom"] {
+        top: auto;
+        bottom: 0;
+        border-bottom: 0;
+        border-radius: 1rem 1rem 0 0;
+    }
+
+    &[data-direction="left"] {
+        top: 0;
+        right: auto;
+        bottom: 0;
+        left: 0;
+        width: min(26rem, calc(100vw - 2rem));
+        height: 100vh;
+        max-height: 100vh;
+        border-left: 0;
+        border-radius: 0 1rem 1rem 0;
+    }
+
+    &[data-direction="top"][data-state="open"] {
+        @include animation.slide-in(
+            $y: -100%,
+            $duration: var(--sheet-enter-duration),
+            $timing-function: var(--sheet-enter-timing)
+        );
+    }
+
+    &[data-direction="top"][data-state="closed"] {
+        @include animation.slide-out(
+            $y: -100%,
+            $duration: var(--sheet-exit-duration),
+            $timing-function: var(--sheet-exit-timing)
+        );
+    }
+
+    &[data-direction="right"][data-state="open"] {
+        @include animation.slide-in(
+            $x: 100%,
+            $y: 0,
+            $duration: var(--sheet-enter-duration),
+            $timing-function: var(--sheet-enter-timing)
+        );
+    }
+
+    &[data-direction="right"][data-state="closed"] {
+        @include animation.slide-out(
+            $x: 100%,
+            $y: 0,
+            $duration: var(--sheet-exit-duration),
+            $timing-function: var(--sheet-exit-timing)
+        );
+    }
+
+    &[data-direction="bottom"][data-state="open"] {
+        @include animation.slide-in(
+            $y: 100%,
+            $duration: var(--sheet-enter-duration),
+            $timing-function: var(--sheet-enter-timing)
+        );
+    }
+
+    &[data-direction="bottom"][data-state="closed"] {
+        @include animation.slide-out(
+            $y: 100%,
+            $duration: var(--sheet-exit-duration),
+            $timing-function: var(--sheet-exit-timing)
+        );
+    }
+
+    &[data-direction="left"][data-state="open"] {
+        @include animation.slide-in(
+            $x: -100%,
+            $y: 0,
+            $duration: var(--sheet-enter-duration),
+            $timing-function: var(--sheet-enter-timing)
+        );
+    }
+
+    &[data-direction="left"][data-state="closed"] {
+        @include animation.slide-out(
+            $x: -100%,
+            $y: 0,
+            $duration: var(--sheet-exit-duration),
+            $timing-function: var(--sheet-exit-timing)
+        );
+    }
+}
+
+.sheetPanel {
+    padding: 1.1rem;
+
+    h3 {
+        margin: 0.2rem 0 0.35rem;
+    }
+
+    p {
+        margin: 0 0 1rem;
+        color: var(--playground-muted);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+}
+
+.card {
+    padding: 1.1rem;
+
+    h3 {
+        margin: 0.2rem 0 0.35rem;
+        text-transform: capitalize;
+    }
+
+    p {
+        margin: 0 0 1rem;
+        color: var(--playground-muted);
+    }
+}
+
+.eyebrow {
+    color: var(--playground-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.stateGrid {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.stateCard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--playground-code-bg);
+
+    div {
+        display: grid;
+        gap: 0.15rem;
+    }
+
+    dt {
+        color: var(--playground-muted);
+        font-size: 0.75rem;
+    }
+
+    dd {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 650;
+    }
+}
+
+.workspacePanel {
+    padding: 1.1rem;
+}
+
+.panelHeader {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h3 {
+        margin: 0.2rem 0 0;
+        font-size: 1.1rem;
+    }
+}
+
+.depthBadge {
+    padding: 0.25rem 0.45rem;
+    border-radius: 999px;
+    background: var(--playground-code-bg);
+    font-size: 0.75rem;
+}
+
+.panelDescription {
+    margin: 0.75rem 0;
+    color: var(--playground-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.params {
+    overflow: auto;
+    margin: 0;
+    padding: 0.7rem;
+    border-radius: 0.45rem;
+    background: var(--playground-code-bg);
+    font-size: 0.78rem;
 }

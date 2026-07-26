@@ -70,6 +70,11 @@ export const NAV_ENTRIES: readonly PlaygroundNavEntry[] = [
             href: "/playground/package/base-ui-react/pretext",
             label: "pretext",
           },
+          {
+            kind: "link",
+            href: "/playground/package/base-ui-react/treeView",
+            label: "treeView",
+          },
         ],
       },
     ],

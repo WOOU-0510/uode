@@ -5,8 +5,12 @@ import {
   AccordionRoot,
   AccordionTrigger,
 } from "./components";
-import { useAccordionController } from "./accordion.hook";
-import type { AccordionController } from "./accordion.types";
+import { useAccordionController, useAccordionState } from "./accordion.hook";
+import type {
+  AccordionController,
+  AccordionState,
+  AccordionStateOptions,
+} from "./accordion.types";
 import type { AccordionContentProps } from "./components/content";
 import type { AccordionItemProps } from "./components/item";
 import type { AccordionRootProps } from "./components/root";
@@ -17,6 +21,7 @@ export type AccordionCompound = {
   Item: (props: AccordionItemProps) => React.ReactNode;
   Trigger: typeof AccordionTrigger;
   Content: (props: AccordionContentProps) => React.ReactNode;
+  useState: (options?: AccordionStateOptions) => AccordionState;
   useController: () => AccordionController;
 };
 
@@ -25,11 +30,14 @@ export const Accordion: AccordionCompound = Object.assign(AccordionRoot, {
   Item: AccordionItem,
   Trigger: AccordionTrigger,
   Content: AccordionContent,
+  useState: useAccordionState,
   useController: useAccordionController,
 });
 
 export namespace Accordion {
   export type Controller = AccordionController;
+  export type State = AccordionState;
+  export type StateOptions = AccordionStateOptions;
   export type RootProps = AccordionRootProps;
   export type ItemProps = AccordionItemProps;
   export type TriggerProps = AccordionTriggerProps;

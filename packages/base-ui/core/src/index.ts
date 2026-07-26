@@ -1,4 +1,10 @@
 export {
+  addUniqueValue,
+  areOrderedValuesEqual,
+  getUniqueValues,
+  removeValue,
+} from "./collection";
+export {
   createButtonStore,
   type ButtonSnapshot,
   type ButtonStore,
@@ -25,11 +31,22 @@ export {
   type SurfaceStore,
 } from "./surface";
 export {
+  createPopoverPanelEntry,
   createPopoverStore,
+  getPopoverEntriesAfterCloseTop,
+  getPopoverEntriesAfterOpen,
   type PopoverOpenMode,
   type PopoverPanelEntry,
   type PopoverSnapshot,
   type PopoverStore,
   type PopoverStoreOptions,
 } from "./popover";
+export {
+  createTreeViewStore,
+  getTreeViewExpandedValuesAfterChange,
+  normalizeTreeViewExpandedValues,
+  type TreeViewSnapshot,
+  type TreeViewStore,
+  type TreeViewStoreOptions,
+} from "./treeView";
 export * from "./pretext";

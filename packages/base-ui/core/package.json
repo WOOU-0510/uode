@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "bun run clean && tsdown"
+    "build": "bun run clean && tsdown",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "catalog:tooling",
