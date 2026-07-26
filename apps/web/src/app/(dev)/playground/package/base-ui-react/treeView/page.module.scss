@@ -137,6 +137,176 @@
   background: var(--playground-card);
 }
 
+.complexExample {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.complexTree {
+  width: min(46rem, 100%);
+  padding: 0.6rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.65rem;
+  background: var(--playground-code-bg);
+}
+
+.complexItem {
+  outline: none;
+}
+
+.complexRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  cursor: default;
+
+  &:hover {
+    background: color-mix(
+      in srgb,
+      var(--playground-card) 70%,
+      transparent
+    );
+  }
+}
+
+.parentRow {
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+}
+
+.complexItem:focus > .complexRow {
+  outline: 2px solid #5177e9;
+  outline-offset: -2px;
+}
+
+.complexItem[aria-selected="true"] > .complexRow {
+  border-color: color-mix(in srgb, #5177e9 45%, transparent);
+  background: color-mix(in srgb, #5177e9 13%, var(--playground-card));
+}
+
+.complexChevron {
+  width: 0.55rem;
+  color: var(--playground-muted);
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 120ms ease;
+}
+
+.complexItem[aria-expanded="true"] > .parentRow .complexChevron {
+  transform: rotate(90deg);
+}
+
+.complexIcon,
+.avatar {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 0.5rem;
+  background: #3159d8;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.avatar {
+  border-radius: 999px;
+  background: color-mix(in srgb, #3159d8 18%, var(--playground-card));
+  color: #3159d8;
+}
+
+.complexMain {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.complexTitleLine {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+
+  strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.complexMeta {
+  overflow: hidden;
+  color: var(--playground-muted);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusBadge {
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background: var(--playground-card);
+  color: var(--playground-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+
+  &[data-tone="progress"] {
+    background: color-mix(in srgb, #3159d8 15%, var(--playground-card));
+    color: #3159d8;
+  }
+
+  &[data-tone="done"] {
+    background: color-mix(in srgb, #2f8f5b 15%, var(--playground-card));
+    color: #237348;
+  }
+
+  &[data-tone="risk"] {
+    background: color-mix(in srgb, #d9822b 18%, var(--playground-card));
+    color: #a65300;
+  }
+}
+
+.progress {
+  width: min(14rem, 100%);
+  height: 0.35rem;
+  accent-color: #3159d8;
+}
+
+.rowAction {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.4rem;
+  background: var(--playground-card);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+
+  &:hover {
+    border-color: #5177e9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #5177e9;
+    outline-offset: 2px;
+  }
+}
+
+.complexGroup {
+  padding-left: 1.2rem;
+}
+
+.activity {
+  color: var(--playground-muted);
+  font-size: 0.8rem;
+}
+
 .explorerLayout {
   display: grid;
   gap: 0.9rem;

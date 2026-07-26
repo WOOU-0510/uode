@@ -1,7 +1,7 @@
 "use client";
 
-import type * as React from "react";
 import { TreeView } from "@uode/base-ui-react";
+import * as React from "react";
 import styles from "./page.module.scss";
 
 type EmptyProps = Record<string, never>;
@@ -199,6 +199,175 @@ const HierarchyExamples = (props: EmptyProps) => {
   );
 };
 
+const ComplexContentTree = (props: EmptyProps) => {
+  const {} = props;
+  const state = TreeView.useState({
+    defaultExpandedValues: ["release"],
+    defaultSelectedValue: "api-migration",
+  });
+  const [activity, setActivity] = React.useState(
+    "행 안의 액션은 트리 선택 및 확장과 독립적으로 동작합니다.",
+  );
+  const handleAction = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    message: string,
+  ) => {
+    event.stopPropagation();
+    setActivity(message);
+  };
+  const handleActionKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+  };
+
+  return (
+    <div className={styles.complexExample}>
+      <TreeView.Root
+        aria-label="릴리스 작업 트리"
+        className={styles.complexTree}
+        expandedValues={state.expandedValues}
+        selectedValue={state.selectedValue}
+        onExpandedValuesChange={state.setExpandedValues}
+        onSelectedValueChange={state.setSelectedValue}
+      >
+        <ClickExpandableItem
+          state={state}
+          className={styles.complexItem}
+          value="release"
+        >
+          <div className={`${styles.complexRow} ${styles.parentRow}`}>
+            <span className={styles.complexChevron} aria-hidden>
+              ›
+            </span>
+            <span className={styles.complexIcon} aria-hidden>
+              R
+            </span>
+            <div className={styles.complexMain}>
+              <div className={styles.complexTitleLine}>
+                <strong>Release 1.4</strong>
+                <span className={styles.statusBadge} data-tone="progress">
+                  진행 중
+                </span>
+              </div>
+              <span className={styles.complexMeta}>
+                3개 작업 · 목표일 8월 2일
+              </span>
+              <progress
+                aria-label="릴리스 진행률"
+                className={styles.progress}
+                max={100}
+                value={67}
+              />
+            </div>
+            <button
+              type="button"
+              className={styles.rowAction}
+              onClick={(event) =>
+                handleAction(event, "Release 1.4 요약을 열었습니다.")
+              }
+              onKeyDown={handleActionKeyDown}
+            >
+              요약
+            </button>
+          </div>
+
+          <TreeView.Group className={styles.complexGroup}>
+            <TreeView.Item className={styles.complexItem} value="design-review">
+              <div className={styles.complexRow}>
+                <span className={styles.avatar} aria-hidden>
+                  MK
+                </span>
+                <div className={styles.complexMain}>
+                  <div className={styles.complexTitleLine}>
+                    <strong>디자인 검토</strong>
+                    <span className={styles.statusBadge} data-tone="done">
+                      완료
+                    </span>
+                  </div>
+                  <span className={styles.complexMeta}>
+                    민경 · 체크리스트 8/8
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className={styles.rowAction}
+                  onClick={(event) =>
+                    handleAction(event, "디자인 검토 기록을 확인했습니다.")
+                  }
+                  onKeyDown={handleActionKeyDown}
+                >
+                  기록
+                </button>
+              </div>
+            </TreeView.Item>
+
+            <TreeView.Item className={styles.complexItem} value="api-migration">
+              <div className={styles.complexRow}>
+                <span className={styles.avatar} aria-hidden>
+                  JH
+                </span>
+                <div className={styles.complexMain}>
+                  <div className={styles.complexTitleLine}>
+                    <strong>API 마이그레이션</strong>
+                    <span className={styles.statusBadge} data-tone="risk">
+                      확인 필요
+                    </span>
+                  </div>
+                  <span className={styles.complexMeta}>
+                    지훈 · 차단 이슈 1개
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className={styles.rowAction}
+                  onClick={(event) =>
+                    handleAction(event, "API 담당자에게 알림을 보냈습니다.")
+                  }
+                  onKeyDown={handleActionKeyDown}
+                >
+                  알림
+                </button>
+              </div>
+            </TreeView.Item>
+
+            <TreeView.Item className={styles.complexItem} value="qa">
+              <div className={styles.complexRow}>
+                <span className={styles.avatar} aria-hidden>
+                  QA
+                </span>
+                <div className={styles.complexMain}>
+                  <div className={styles.complexTitleLine}>
+                    <strong>회귀 테스트</strong>
+                    <span className={styles.statusBadge}>대기</span>
+                  </div>
+                  <span className={styles.complexMeta}>
+                    담당자 미지정 · 테스트 0/12
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className={styles.rowAction}
+                  onClick={(event) =>
+                    handleAction(event, "QA 담당자 지정 화면을 열었습니다.")
+                  }
+                  onKeyDown={handleActionKeyDown}
+                >
+                  담당 지정
+                </button>
+              </div>
+            </TreeView.Item>
+          </TreeView.Group>
+        </ClickExpandableItem>
+      </TreeView.Root>
+
+      <output className={styles.activity} aria-live="polite">
+        {activity}
+      </output>
+    </div>
+  );
+};
+
 const AppliedTree = (props: EmptyProps) => {
   const {} = props;
   const state = TreeView.useState({
@@ -381,6 +550,15 @@ const TreeViewPlaygroundPage = (props: TreeViewPlaygroundPageProps) => {
           클릭해 하위 항목을 열고 닫을 수 있습니다.
         </p>
         <HierarchyExamples />
+      </section>
+
+      <section className={styles.section}>
+        <h2>복합 UI 행</h2>
+        <p>
+          TreeView.Item의 children에는 텍스트뿐 아니라 상태 배지, 진행률,
+          메타데이터와 독립 액션도 조합할 수 있습니다.
+        </p>
+        <ComplexContentTree />
       </section>
 
       <section className={styles.section}>
