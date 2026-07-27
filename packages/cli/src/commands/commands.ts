@@ -17,10 +17,10 @@ export const buildCommands = async (
     case "start": {
       const apps = await pickApps(command);
 
-      if (command === "dev" && apps.includes("web")) {
+      if (command === "dev" && apps.includes("desktop")) {
         return [
           ...apps
-            .filter((app) => app !== "web")
+            .filter((app) => app !== "desktop")
             .map((app) => ({
               bin: "bun",
               args: ["run", "--filter", app, "dev"],
@@ -69,7 +69,7 @@ export const buildCommands = async (
       return [
         {
           bin: "bun",
-          args: ["x", "turbo", "run", "t:g", "--filter=web"],
+          args: ["x", "turbo", "run", "t:g", "--filter=desktop"],
         },
       ];
     default:

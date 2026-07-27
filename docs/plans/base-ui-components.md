@@ -1,8 +1,8 @@
 # Base UI 컴포넌트 계획
 
-- 상태: 기반 구조 정리 및 TreeView 구현 완료
+- 상태: P1 폼 및 로딩 primitive 구현 완료
 - 최종 수정: 2026-07-27
-- 대상: `packages/base-ui/core`, `packages/base-ui/react`, `apps/web`
+- 대상: `packages/base-ui/core`, `packages/base-ui/react`, `apps/desktop`
 
 ## 목차
 
@@ -127,6 +127,12 @@ compound component 조합을 사용한다.
 | TreeView | 단일 선택 트리와 키보드 탐색 | 제공 |
 | Icon | SVG 아이콘 렌더링 | 제공 |
 | Pretext | 텍스트 블록 높이와 줄 수 측정 | 제공 |
+| Label, Input, Textarea | native 폼 요소의 props와 ref 전달 | 제공 |
+| Field | label, description, error와 control의 접근성 연결 | 제공 |
+| Checkbox, RadioGroup, Switch | native 선택 상태와 폼 의미 유지 | 제공 |
+| NativeSelect | native select, option, optgroup 조합 | 제공 |
+| Skeleton | 상태 없는 로딩 레이아웃과 animation hook | 제공 |
+| VisuallyHidden | 시각적으로 숨긴 접근성 텍스트 | 제공 |
 
 상세 사용법은
 [`packages/base-ui/react/docs/components.md`](../../packages/base-ui/react/docs/components.md)
@@ -134,7 +140,7 @@ compound component 조합을 사용한다.
 
 ## 구현 우선순위
 
-### P1. 폼과 로딩 피드백 primitive
+### P1. 폼과 로딩 피드백 primitive (구현 완료)
 
 | 순서 | 후보 | 필요한 이유 | 범위 |
 |---|---|---|---|
@@ -287,3 +293,10 @@ treeView/
   Playground의 controlled 예시를 core store 주입 방식으로 변경.
 - 2026-07-27: HTML 우선 원칙을 “컴포넌트 제외”가 아니라 “native 동작과 상태를
   재구현하지 않음”으로 수정하고, 폼 primitive와 Skeleton을 P1으로 상향.
+- 2026-07-27: Label, Input, Textarea, Field, Checkbox, RadioGroup, Switch,
+  NativeSelect, Skeleton, VisuallyHidden을 구현하고 문서와 Playground 예시를 추가.
+- 2026-07-27: Form Playground를 컴포넌트별 페이지로 분리하고 각 페이지에
+  무스타일 기본형과 커스텀형을 추가. Field 페이지에 TanStack Form과
+  `@uode/validation`을 조합한 validation 예시를 추가.
+- 2026-07-27: 동적 `[component]` Form Playground를 제거하고 컴포넌트별
+  정적 route가 각자의 page, example logic, style을 소유하도록 co-location.

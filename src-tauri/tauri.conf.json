@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "identifier": "com.user.uode",
   "build": {
-    "beforeDevCommand": "bun run --cwd apps/web dev",
+    "beforeDevCommand": "bun run --cwd apps/desktop dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run --cwd apps/web build",
-    "frontendDist": "../apps/web/out"
+    "beforeBuildCommand": "bun run --cwd apps/desktop build",
+    "frontendDist": "../apps/desktop/out"
   },
   "app": {
     "windows": [

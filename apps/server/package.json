@@ -1,0 +1,16 @@
+{
+  "name": "server",
+  "version": "1.0.50",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@uode/validation": "workspace:*",
+    "elysia": "catalog:server"
+  },
+  "devDependencies": {
+    "bun-types": "catalog:tooling"
+  }
+}

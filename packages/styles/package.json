@@ -6,6 +6,10 @@
     "./animation": {
       "sass": "./src/animation/_index.scss",
       "default": "./src/animation/_index.scss"
+    },
+    "./skeleton": {
+      "sass": "./src/skeleton/_index.scss",
+      "default": "./src/skeleton/_index.scss"
     }
   }
 }

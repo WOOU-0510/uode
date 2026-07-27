@@ -1,0 +1,43 @@
+.choiceCards {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.legend {
+  padding: 0 0 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.choiceCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.65rem;
+  background: var(--playground-card);
+  cursor: pointer;
+
+  &[data-selected] {
+    border-color: #5170d7;
+    background: color-mix(in srgb, #5170d7 9%, var(--playground-card));
+  }
+
+  > span {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  strong {
+    font-size: 0.82rem;
+  }
+
+  small {
+    color: var(--playground-muted);
+    font-size: 0.72rem;
+  }
+}

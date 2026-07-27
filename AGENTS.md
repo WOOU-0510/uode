@@ -5,6 +5,19 @@ Before making changes or giving architectural guidance, always read:
 - `docs/architecture.md` (project structure, co-location, CSS layering, state/store rules)
 - `docs/project-overview.md` (product direction & Rust domain layout)
 
+## Working agreements
+
+- Do not use OMO tools, skills, agents, or planning modes unless the user
+  explicitly asks to enable OMO again. Prefer direct repository inspection and
+  the smallest relevant tool surface.
+- Store implementation plans and durable architectural decisions under
+  `docs/plans/`; do not leave the only copy in chat.
+- Preserve the user's running dev servers and desktop app processes. Stop only
+  processes started by the agent.
+- When a React event value is needed inside a functional state updater,
+  promise, timer, or other deferred callback, read the required
+  `event.currentTarget` values synchronously first.
+
 When creating git commits, write commit messages in **Korean**.
 
 If a user request touches Next.js behavior, follow the Next.js docs index below first.

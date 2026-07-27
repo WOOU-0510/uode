@@ -1,0 +1,72 @@
+.demoGrid {
+  display: grid;
+  gap: 0.85rem;
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stackedLabel {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.noteTextarea {
+  width: 100%;
+  min-height: 6rem;
+  box-sizing: border-box;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.5rem;
+  resize: vertical;
+  background: var(--playground-card);
+  color: inherit;
+  font: inherit;
+
+  &:focus-visible {
+    border-color: #5170d7;
+    outline: 3px solid color-mix(in srgb, #5170d7 20%, transparent);
+  }
+}
+
+.counter {
+  justify-self: end;
+  color: var(--playground-muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.messageComposer {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.75rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.7rem;
+  background: var(--playground-card);
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  textarea {
+    min-height: 4rem;
+    padding: 0.2rem;
+    border: 0;
+    outline: 0;
+    resize: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+  }
+
+  button {
+    width: fit-content;
+    justify-self: end;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0.45rem;
+    background: #5170d7;
+    color: #fff;
+  }
+}

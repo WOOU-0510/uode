@@ -83,7 +83,7 @@ GitHub는 **private 저장소의 Release 자산**에 대해 저장소 읽기 권
 
 경로:
 
-- `apps/web/src/shared/lib/tauri/updater.ts`
+- `apps/desktop/src/shared/lib/tauri/updater.ts`
 
 ## 6) 채널 운영 주의사항
 
@@ -100,4 +100,3 @@ GitHub는 **private 저장소의 Release 자산**에 대해 저장소 읽기 권
   2. 새 버전 태그 생성/푸시
   3. Actions 성공 확인
   4. 설치된 앱에서 업데이트 체크/설치
-

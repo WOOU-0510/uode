@@ -65,3 +65,39 @@
 
 퇴장 애니메이션을 표시하려면 애니메이션이 끝날 때까지 DOM을 유지해야 합니다. React에서는
 `animationend`에서 닫힘 상태를 확정하는 방식으로 구성할 수 있습니다.
+
+## Skeleton
+
+```scss
+@use "pkg:@uode/styles/skeleton" as skeleton;
+```
+
+### Pulse
+
+```scss
+.placeholder {
+  @include skeleton.pulse(
+    $duration: 1.4s,
+    $timing-function: ease-in-out,
+    $from: 0.45,
+    $to: 0.9,
+    $color: #d8deea
+  );
+}
+```
+
+### Shimmer
+
+```scss
+.placeholder {
+  @include skeleton.shimmer(
+    $duration: 2s,
+    $timing-function: linear,
+    $base-color: #d8deea,
+    $highlight-color: #f5f7fb,
+    $angle: 100deg
+  );
+}
+```
+
+두 mixin 모두 `prefers-reduced-motion: reduce`에서 animation을 1회만 재생합니다.

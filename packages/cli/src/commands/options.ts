@@ -12,13 +12,13 @@ export const rootCommands = [
 
 export const appScripts = [
   { app: "server", script: "dev" },
-  { app: "web", script: "dev" },
-  { app: "web", script: "start" },
+  { app: "desktop", script: "dev" },
+  { app: "desktop", script: "start" },
 ] as const satisfies readonly AppScript[];
 
 export const lintSuffixes = [
   { value: "", label: "기본", hint: "bun run lint" },
-  { value: "--filter=web", label: "web만", hint: "turbo filter" },
+  { value: "--filter=desktop", label: "desktop만", hint: "turbo filter" },
   {
     value: "--filter=@uode/base-ui-react",
     label: "base-ui react만",
@@ -29,7 +29,7 @@ export const lintSuffixes = [
 
 export const formatSuffixes = [
   { value: "", label: "기본", hint: "bun run format" },
-  { value: "apps/web", label: "apps/web", hint: "경로 지정" },
+  { value: "apps/desktop", label: "apps/desktop", hint: "경로 지정" },
   { value: "packages/base-ui", label: "packages/base-ui", hint: "경로 지정" },
   { value: "custom", label: "직접 입력" },
 ] as const satisfies readonly SuffixOption[];

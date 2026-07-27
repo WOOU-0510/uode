@@ -7,7 +7,7 @@ export type RootCommand =
   | "ic:g"
   | "t:g";
 
-export type AppName = "server" | "web";
+export type AppName = "desktop" | "server";
 
 export type AppScript = {
   readonly app: AppName;

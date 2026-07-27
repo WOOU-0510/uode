@@ -11,8 +11,8 @@
 
 ## 전체 구조 (큰 그림)
 
-- **모노레포**: 루트에서 [Turborepo](https://turbo.build/)(`turbo`)로 워크스페이스 스크립트를 실행합니다. Next.js 앱은 `apps/web/`에 있으며, 아래 `src/` 경로는 모두 `apps/web/src/`를 뜻합니다.
-- **프론트엔드**: Next.js App Router 기반
+- **모노레포**: 루트에서 [Turborepo](https://turbo.build/)(`turbo`)로 워크스페이스 스크립트를 실행합니다. Tauri 데스크톱 앱의 Next.js UI는 `apps/desktop/`에 있으며, 아래 `src/` 경로는 모두 `apps/desktop/src/`를 뜻합니다. 향후 독립 웹 앱은 `apps/web/`에 둡니다.
+- **데스크톱 UI**: Next.js App Router 기반
   - `src/app/`: 라우트(페이지)와 라우트 내부 전용 UI/로직
   - `src/shared/`: 범용 유틸, 공용 라이브러리 래퍼, 전역 스타일 토대, 공용 자산
   - `src/widgets/`, `src/features/`, `src/entities/`: FSD 지향 레이어(필요에 따라 확장)
@@ -56,7 +56,7 @@
 전역 `@layer`는 **토대**에만 사용한다.
 
 - 사용 위치:
-  - `apps/web/src/shared/styles/global/order.scss`에서 레이어 선언 순서만 관리
+  - `apps/desktop/src/shared/styles/global/order.scss`에서 레이어 선언 순서만 관리
   - (예: reset/vendor/base 및 추후 UI-kit 레이어)
 - 사용하지 않는 위치:
   - `app` / `widgets` / `features` / `entities`의 **CSS Module 내부**
@@ -135,4 +135,3 @@ Playground는 두 가지 방향이 모두 가능하다.
 ## 배포/업데이트 운영 문서
 
 - Tauri 자동 업데이트 배포 가이드: `docs/tauri-auto-update.md`
-

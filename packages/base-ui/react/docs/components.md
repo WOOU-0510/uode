@@ -5,15 +5,19 @@
 ## 목차
 
 1. [공통 원칙](#공통-원칙)
-2. [Button](#button)
-3. [Accordion](#accordion)
-4. [Popover](#popover)
-5. [TreeView](#treeview)
-6. [Icon](#icon)
-7. [Pretext hooks](#pretext-hooks)
-8. [TanStack Form과 연결](#tanstack-form과-연결)
-9. [TanStack Table과 연결](#tanstack-table과-연결)
-10. [Next.js에서 사용](#nextjs에서-사용)
+2. [폼 primitive](#폼-primitive)
+3. [Field](#field)
+4. [선택형 control](#선택형-control)
+5. [Skeleton과 VisuallyHidden](#skeleton과-visuallyhidden)
+6. [Button](#button)
+7. [Accordion](#accordion)
+8. [Popover](#popover)
+9. [TreeView](#treeview)
+10. [Icon](#icon)
+11. [Pretext hooks](#pretext-hooks)
+12. [TanStack Form과 연결](#tanstack-form과-연결)
+13. [TanStack Table과 연결](#tanstack-table과-연결)
+14. [Next.js에서 사용](#nextjs에서-사용)
 
 ## 공통 원칙
 
@@ -23,9 +27,19 @@
 import {
   Accordion,
   Button,
+  Checkbox,
+  Field,
   Icon,
+  Input,
+  Label,
+  NativeSelect,
   Popover,
+  RadioGroup,
+  Skeleton,
+  Switch,
+  Textarea,
   TreeView,
+  VisuallyHidden,
   useTextBlockHeight,
   useTextBlockLines,
 } from "@uode/base-ui-react";
@@ -98,6 +112,217 @@ const state = TreeView.useState({
 외부 hook은 선택 사항입니다. Root의 uncontrolled 상태, 일반
 `React.useState`, TanStack 상태나 다른 store도 같은 controlled props에 연결할
 수 있습니다. `default*` options는 hook이 처음 store를 만들 때만 사용됩니다.
+
+## 폼 primitive
+
+### Label, Input, Textarea
+
+각 컴포넌트는 실제 `<label>`, `<input>`, `<textarea>`를 렌더링합니다. 별도
+value나 validation 상태를 만들지 않으며 해당 native 요소의 props와 React 19
+ref를 그대로 받습니다.
+
+```tsx
+const inputRef = React.useRef<HTMLInputElement>(null);
+
+<Label htmlFor="title">제목</Label>
+<Input
+  ref={inputRef}
+  id="title"
+  name="title"
+  required
+  onChange={(event) => setTitle(event.currentTarget.value)}
+/>
+
+<Label>
+  설명
+  <Textarea name="description" rows={4} />
+</Label>;
+```
+
+`type`, `value`, `defaultValue`, `checked`, `required`, `disabled`,
+`onChange`, `onBlur`, `aria-*`, `data-*`의 의미는 native HTML과 같습니다.
+
+### NativeSelect
+
+`NativeSelect.Root`, `NativeSelect.Option`, `NativeSelect.OptGroup`은 각각 실제
+`<select>`, `<option>`, `<optgroup>`을 렌더링합니다.
+
+```tsx
+<NativeSelect.Root name="team" defaultValue="frontend">
+  <NativeSelect.OptGroup label="Engineering">
+    <NativeSelect.Option value="frontend">Frontend</NativeSelect.Option>
+    <NativeSelect.Option value="backend">Backend</NativeSelect.Option>
+  </NativeSelect.OptGroup>
+</NativeSelect.Root>
+```
+
+검색 가능한 custom select나 option 내부의 복합 UI는 이 컴포넌트의 책임이
+아닙니다. native select로 부족한 요구가 확인될 때 별도 Custom Select 또는
+Combobox를 사용합니다.
+
+## Field
+
+Field는 control의 값이나 validation을 소유하지 않고 label, description,
+error의 id와 ARIA 관계만 연결합니다.
+
+```tsx
+<Field.Root invalid={invalid} required>
+  <Field.Label>이메일</Field.Label>
+  <Field.Control>
+    {(controlProps) => (
+      <Input
+        {...controlProps}
+        name="email"
+        value={email}
+        onChange={(event) => setEmail(event.currentTarget.value)}
+      />
+    )}
+  </Field.Control>
+  <Field.Description>로그인에 사용할 주소입니다.</Field.Description>
+  {invalid ? <Field.Error>이메일을 확인해 주세요.</Field.Error> : null}
+</Field.Root>
+```
+
+### `Field.Root`
+
+`<div>`를 렌더링하며 div props와 ref를 받습니다.
+
+| prop | type | 기본값 | 설명 |
+|---|---|---|---|
+| `controlId` | `string` | `React.useId()` 기반 | Label과 control을 연결할 id |
+| `invalid` | `boolean` | `false` | control의 `aria-invalid`와 error 연결 여부 |
+| `disabled` | `boolean` | `false` | Control render props에 전달 |
+| `required` | `boolean` | `false` | Control render props에 전달 |
+
+상태 표현용 `data-invalid`, `data-disabled`, `data-required`가 Root에 제공됩니다.
+
+### `Field.Control`
+
+DOM을 렌더링하지 않는 render prop 컴포넌트입니다. 다음 값을 native control에
+전달합니다.
+
+| 값 | 설명 |
+|---|---|
+| `id` | Label의 `htmlFor`와 연결 |
+| `aria-describedby` | Description 및 invalid일 때 Error id |
+| `aria-invalid` | Root의 invalid 상태 |
+| `disabled`, `required` | Root에서 명시한 native 상태 |
+
+render prop이므로 Input뿐 아니라 Textarea, NativeSelect 또는 다른 native
+control에도 같은 관계를 적용할 수 있습니다.
+
+### `Field.Label`, `Field.Description`, `Field.Error`
+
+- Label은 `<label>`을 렌더링하고 기본 `htmlFor`를 생성된 control id로 설정합니다.
+- Description은 `<p>`를 렌더링하고 설명 id를 적용합니다.
+- Error는 `<p>`를 렌더링하며 invalid 상태에서는 기본 `role="alert"`를 갖습니다.
+
+## 선택형 control
+
+### Checkbox
+
+실제 `<input type="checkbox">`를 렌더링하며 `type`을 제외한 input props를
+받습니다.
+
+```tsx
+<Label>
+  <Checkbox name="terms" required />
+  약관에 동의
+</Label>
+```
+
+DOM property인 indeterminate도 선언적으로 설정할 수 있습니다.
+
+```tsx
+<Checkbox checked={false} indeterminate aria-label="일부 항목 선택됨" />
+```
+
+indeterminate일 때 `aria-checked="mixed"`가 자동 적용됩니다.
+
+### Switch
+
+실제 `<input type="checkbox" role="switch">`를 렌더링합니다. checked 상태는
+native props 또는 외부 폼 상태가 소유합니다.
+
+```tsx
+<Label>
+  <Switch
+    name="notifications"
+    checked={enabled}
+    onChange={(event) => setEnabled(event.currentTarget.checked)}
+  />
+  알림 받기
+</Label>
+```
+
+### RadioGroup
+
+`RadioGroup.Root`, `RadioGroup.Legend`, `RadioGroup.Item`은 각각
+`<fieldset>`, `<legend>`, `<input type="radio">`를 기반으로 합니다.
+
+```tsx
+<RadioGroup.Root name="contact" required>
+  <RadioGroup.Legend>연락 방법</RadioGroup.Legend>
+  <Label>
+    <RadioGroup.Item value="email" defaultChecked />
+    이메일
+  </Label>
+  <Label>
+    <RadioGroup.Item value="chat" />
+    채팅
+  </Label>
+</RadioGroup.Root>
+```
+
+Root의 `name`, `disabled`, `required`는 모든 Item에 전달됩니다. 선택 값은
+브라우저의 동일 name radio 동작이나 소비처의 `checked`, `onChange`가 관리하며
+별도 store를 만들지 않습니다.
+
+## Skeleton과 VisuallyHidden
+
+### Skeleton
+
+`Skeleton`은 `data-skeleton`이 있는 `<div aria-hidden="true">`를 렌더링합니다.
+크기, 형태, 색상과 animation은 className으로 주입합니다. 실제 로딩 영역에는
+별도로 `aria-busy`와 accessible name 또는 상태 텍스트를 제공합니다.
+
+```tsx
+<section aria-busy="true" aria-label="프로필을 불러오는 중">
+  <Skeleton className={styles.avatar} />
+  <Skeleton className={styles.line} />
+</section>
+```
+
+`@uode/styles/skeleton`은 호출부에서 조절 가능한 `pulse`와 `shimmer` mixin을
+제공합니다.
+
+```scss
+@use "pkg:@uode/styles/skeleton" as skeleton;
+
+.line {
+  width: 12rem;
+  height: 1rem;
+  border-radius: 0.4rem;
+
+  @include skeleton.pulse(
+    $duration: 1.4s,
+    $color: #d8deea
+  );
+}
+```
+
+두 mixin은 `prefers-reduced-motion: reduce`에서 animation 반복을 중단합니다.
+
+### VisuallyHidden
+
+실제 `<span>`을 렌더링하며 화면에서는 숨기고 접근성 트리에는 내용을 남깁니다.
+
+```tsx
+<button type="button">
+  <Icon name="arrow_range" aria-hidden />
+  <VisuallyHidden>새로고침</VisuallyHidden>
+</button>
+```
 
 ## Button
 
@@ -629,30 +854,77 @@ SSR에서는 0 높이와 빈 줄 목록으로 시작한 뒤 client layout effect
 
 base-ui가 TanStack Form의 값, touched, validation 상태를 소유하지 않습니다.
 field가 제공한 값을 HTML props와 controlled props에 연결합니다.
+`@uode/validation`의 Zod schema는 Standard Schema를 지원하므로 TanStack
+Form validator에 직접 전달할 수 있습니다.
+
+```tsx
+import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { email } from "@uode/validation";
+
+const form = useForm({
+  defaultValues: { email: "" },
+  validationLogic: revalidateLogic(),
+  onSubmit: ({ value }) => save(value),
+});
+
+<form.Field
+  name="email"
+  validators={{ onDynamic: email }}
+  children={(field) => (
+    <Field.Root
+      invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+      required
+    >
+      <Field.Label>이메일</Field.Label>
+      <Field.Control>
+        {(controlProps) => (
+          <Input
+            {...controlProps}
+            name={field.name}
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={(event) => field.handleChange(event.currentTarget.value)}
+          />
+        )}
+      </Field.Control>
+      <Field.Description>로그인에 사용할 주소입니다.</Field.Description>
+      {!field.state.meta.isValid ? (
+        <Field.Error>이메일을 확인해 주세요.</Field.Error>
+      ) : null}
+    </Field.Root>
+  )}
+/>
+```
+
+동일한 방식으로 Checkbox의 `checked`, RadioGroup.Item의 `checked`,
+NativeSelect.Root의 `value`를 TanStack field에 연결합니다.
 
 ```tsx
 <form.Field
   name="notifications"
   children={(field) => (
-    <Button.Root
-      pressed={field.state.value}
-      onPressedChange={field.handleChange}
-    >
-      <Button.Trigger
-        toggle
+    <Label>
+      <Switch
         name={field.name}
+        checked={field.state.value}
         onBlur={field.handleBlur}
-        aria-invalid={!field.state.meta.isValid}
-      >
-        알림
-      </Button.Trigger>
-    </Button.Root>
+        onChange={(event) =>
+          field.handleChange(event.currentTarget.checked)
+        }
+      />
+      알림
+    </Label>
   )}
 />
 ```
 
 텍스트, checkbox, radio, select는 우선 native 요소에 `name`, `value`,
 `checked`, `onBlur`, `onChange`, `aria-invalid`를 직접 전달합니다.
+
+전체 조합과 컴포넌트별 기본·커스텀 예시는 Playground의
+`/playground/package/base-ui-react/form`에서 확인합니다. Field 페이지는
+`displayName`, `email`, `shortText`, `requiredSelection`, `accepted` schema를
+TanStack Form 1.33 validator에 주입하는 제출 가능한 예시를 제공합니다.
 
 ## TanStack Table과 연결
 

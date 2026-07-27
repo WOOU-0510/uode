@@ -1,6 +1,6 @@
 /* 이 파일은 packages/base-ui/react/scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
 
-import * as React from "react";
+import type * as React from "react";
 
 import ArrowRangeIcon from "./arrow_range";
 import ReactIcon from "./react";
@@ -9,12 +9,7 @@ import ViteIcon from "./vite";
 
 export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
-export const ICON_NAMES = [
-  "arrow_range",
-  "react",
-  "tauri",
-  "vite",
-] as const;
+export const ICON_NAMES = ["arrow_range", "react", "tauri", "vite"] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];
 

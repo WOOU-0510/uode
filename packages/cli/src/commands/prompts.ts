@@ -64,7 +64,7 @@ export const pickSuffix = async (
   const input = await ask(
     text({
       message: `${script} 뒤에 붙일 값을 입력하세요.`,
-      placeholder: script === "lint" ? "--filter=web" : "apps/web/src",
+      placeholder: script === "lint" ? "--filter=desktop" : "apps/desktop/src",
     }),
   );
 

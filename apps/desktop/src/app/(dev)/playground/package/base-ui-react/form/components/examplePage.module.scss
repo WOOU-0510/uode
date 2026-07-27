@@ -1,0 +1,88 @@
+.page {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+}
+
+.backLink {
+  width: fit-content;
+  color: var(--playground-muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+.pageHeader {
+  display: grid;
+  gap: 0.35rem;
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 1.55rem;
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    color: var(--playground-muted);
+    line-height: 1.55;
+  }
+}
+
+.eyebrow {
+  color: #5170d7;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section {
+  overflow: hidden;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.75rem;
+  background: var(--playground-card);
+
+  > header {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--playground-border);
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 0.95rem;
+    }
+
+    p {
+      margin-top: 0.3rem;
+      color: var(--playground-muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.exampleBody {
+  padding: 1rem;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--playground-border) 28%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--playground-border) 28%, transparent) 1px,
+      transparent 1px
+    );
+  background-color: var(--playground-code-bg);
+  background-size: 1.25rem 1.25rem;
+}

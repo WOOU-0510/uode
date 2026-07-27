@@ -1,0 +1,61 @@
+@keyframes uode-skeleton-pulse {
+  from {
+    opacity: var(--uode-skeleton-opacity-from, 0.45);
+  }
+
+  to {
+    opacity: var(--uode-skeleton-opacity-to, 0.9);
+  }
+}
+
+@keyframes uode-skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+  }
+}
+
+@mixin pulse(
+  $duration: 1.6s,
+  $timing-function: ease-in-out,
+  $from: 0.45,
+  $to: 0.9,
+  $color: currentcolor
+) {
+  --uode-skeleton-opacity-from: #{$from};
+  --uode-skeleton-opacity-to: #{$to};
+
+  background: $color;
+  animation: uode-skeleton-pulse $duration $timing-function infinite alternate;
+
+  @include reduced-motion;
+}
+
+@mixin shimmer(
+  $duration: 1.8s,
+  $timing-function: linear,
+  $base-color: currentcolor,
+  $highlight-color: rgb(255 255 255 / 45%),
+  $angle: 100deg
+) {
+  background-image: linear-gradient(
+    $angle,
+    $base-color 30%,
+    $highlight-color 50%,
+    $base-color 70%
+  );
+  background-size: 200% 100%;
+  animation: uode-skeleton-shimmer $duration $timing-function infinite;
+
+  @include reduced-motion;
+}

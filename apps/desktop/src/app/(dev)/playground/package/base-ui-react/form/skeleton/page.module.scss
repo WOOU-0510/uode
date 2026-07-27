@@ -1,0 +1,74 @@
+@use "pkg:@uode/styles/skeleton" as skeleton;
+
+.skeletonGrid {
+  display: grid;
+  gap: 0.85rem;
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.profileSkeleton {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.7rem;
+  background: var(--playground-card);
+}
+
+.avatarSkeleton,
+.titleSkeleton,
+.lineSkeleton,
+.shortLineSkeleton {
+  border-radius: 0.4rem;
+
+  @include skeleton.pulse(
+    $duration: 1.25s,
+    $color: color-mix(in srgb, #71809e 26%, transparent)
+  );
+}
+
+.avatarSkeleton {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+.titleSkeleton {
+  width: 62%;
+  height: 0.95rem;
+}
+
+.lineSkeleton,
+.shortLineSkeleton {
+  height: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.shortLineSkeleton {
+  width: 42%;
+}
+
+.listSkeleton {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.7rem;
+  background: var(--playground-card);
+}
+
+.shimmerSkeleton {
+  height: 2.1rem;
+  border-radius: 0.45rem;
+
+  @include skeleton.shimmer(
+    $duration: 2s,
+    $base-color: color-mix(in srgb, #71809e 20%, transparent),
+    $highlight-color: color-mix(in srgb, #fff 58%, transparent)
+  );
+}

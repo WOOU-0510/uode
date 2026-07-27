@@ -1,0 +1,91 @@
+.unstyledStack,
+.stackedLabel {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+}
+
+.demoGrid {
+  display: grid;
+  gap: 0.85rem;
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stackedLabel {
+  justify-items: stretch;
+  color: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+
+  > small {
+    color: var(--playground-muted);
+    font-size: 0.72rem;
+    font-weight: 400;
+  }
+}
+
+.requiredMark {
+  padding: 0.12rem 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #c53a47 13%, transparent);
+  color: #c53a47;
+  font-size: 0.62rem;
+}
+
+.textControl {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.5rem;
+  background: var(--playground-card);
+  color: inherit;
+  font: inherit;
+}
+
+.inlineLabel {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--playground-border);
+  border-radius: 0.65rem;
+  background: var(--playground-card);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.switchControl {
+  position: relative;
+  width: 2.5rem;
+  height: 1.4rem;
+  border: 0;
+  border-radius: 999px;
+  appearance: none;
+  background: #7d8799;
+
+  &::after {
+    position: absolute;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: #fff;
+    content: "";
+    transition: transform 150ms ease;
+  }
+
+  &:checked {
+    background: #5170d7;
+
+    &::after {
+      transform: translateX(1.1rem);
+    }
+  }
+}
