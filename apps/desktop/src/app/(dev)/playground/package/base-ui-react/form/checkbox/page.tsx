@@ -16,6 +16,7 @@ type CheckboxPageProps = Record<string, never>;
 const CheckboxPage = (props: CheckboxPageProps) => {
   const {} = props;
   const [selected, setSelected] = React.useState(["comments"]);
+  const [submitted, setSubmitted] = React.useState("제출 전");
   const toggle = (value: string, checked: boolean) => {
     setSelected((current) =>
       checked ? [...current, value] : current.filter((item) => item !== value),
@@ -33,7 +34,7 @@ const CheckboxPage = (props: CheckboxPageProps) => {
       >
         <div className={styles.unstyledStack}>
           <Label>
-            <Checkbox defaultChecked /> 이메일 알림
+            <Checkbox name="terms" defaultChecked required /> 필수 동의
           </Label>
           <Label>
             <Checkbox indeterminate /> 일부 항목 선택됨
@@ -46,9 +47,18 @@ const CheckboxPage = (props: CheckboxPageProps) => {
 
       <ExampleSection
         title="커스텀 형태"
-        description="checked 상태를 외부에서 제어해 카드 전체에 선택 스타일을 적용합니다."
+        description="native input을 상태와 FormData의 원본으로 유지하고 Indicator만 CSS로 표현합니다."
       >
-        <div className={styles.choiceCards}>
+        <form
+          className={styles.choiceCards}
+          onSubmit={(event) => {
+            event.preventDefault();
+            const values = new FormData(event.currentTarget).getAll(
+              "notifications",
+            );
+            setSubmitted(values.join(", ") || "선택 없음");
+          }}
+        >
           {OPTIONS.map(([value, title, description]) => {
             const checked = selected.includes(value);
 
@@ -59,12 +69,15 @@ const CheckboxPage = (props: CheckboxPageProps) => {
                 key={value}
               >
                 <Checkbox
+                  className={styles.hiddenControl}
+                  name="notifications"
                   value={value}
                   checked={checked}
                   onChange={(event) =>
                     toggle(value, event.currentTarget.checked)
                   }
                 />
+                <Checkbox.Indicator className={styles.indicator} />
                 <span>
                   <strong>{title}</strong>
                   <small>{description}</small>
@@ -72,7 +85,37 @@ const CheckboxPage = (props: CheckboxPageProps) => {
               </Label>
             );
           })}
-        </div>
+          <Label className={styles.choiceCard} data-disabled>
+            <Checkbox
+              className={styles.hiddenControl}
+              name="notifications"
+              value="disabled"
+              disabled
+            />
+            <Checkbox.Indicator className={styles.indicator} />
+            <span>
+              <strong>비활성 선택지</strong>
+              <small>disabled control은 FormData에서 제외됩니다.</small>
+            </span>
+          </Label>
+          <Label className={styles.choiceCard} data-mixed>
+            <Checkbox
+              className={styles.hiddenControl}
+              name="notifications"
+              value="partial"
+              indeterminate
+            />
+            <Checkbox.Indicator className={styles.indicator} />
+            <span>
+              <strong>일부 선택</strong>
+              <small>indeterminate 상태도 같은 Indicator로 표현합니다.</small>
+            </span>
+          </Label>
+          <div className={styles.formResult}>
+            <button type="submit">FormData 확인</button>
+            <output>notifications: {submitted}</output>
+          </div>
+        </form>
       </ExampleSection>
     </ExamplePage>
   );

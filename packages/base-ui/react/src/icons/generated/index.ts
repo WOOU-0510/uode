@@ -1,5 +1,10 @@
 export * from "./registry";
 export { default as ArrowRangeIcon } from "./arrow_range";
+export { default as FolderFilledIcon } from "./folder_filled";
+export { default as FolderOutlinedIcon } from "./folder_outlined";
+export { default as FolderRoundIcon } from "./folder_round";
+export { default as FolderSharpIcon } from "./folder_sharp";
+export { default as FolderTwotoneIcon } from "./folder_twotone";
 export { default as ReactIcon } from "./react";
 export { default as TauriIcon } from "./tauri";
 export { default as ViteIcon } from "./vite";

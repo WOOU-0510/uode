@@ -29,7 +29,6 @@ import {
   Button,
   Checkbox,
   Field,
-  Icon,
   Input,
   Label,
   NativeSelect,
@@ -43,6 +42,7 @@ import {
   useTextBlockHeight,
   useTextBlockLines,
 } from "@uode/base-ui-react";
+import ArrowRangeIcon from "@uode/base-ui-react/icons/arrow_range";
 import "@uode/base-ui-react/style.css";
 ```
 
@@ -227,6 +227,7 @@ control에도 같은 관계를 적용할 수 있습니다.
 ```tsx
 <Label>
   <Checkbox name="terms" required />
+  <Checkbox.Indicator className={styles.indicator} />
   약관에 동의
 </Label>
 ```
@@ -238,6 +239,10 @@ DOM property인 indeterminate도 선언적으로 설정할 수 있습니다.
 ```
 
 indeterminate일 때 `aria-checked="mixed"`가 자동 적용됩니다.
+`Checkbox.Indicator`는 상태를 소유하지 않는 `aria-hidden` span입니다. 실제
+input을 시각적으로 숨긴 뒤 `input:checked + [data-part="indicator"]` 같은 CSS
+selector로 표시하므로 keyboard, validation과 FormData 동작은 native input에
+남습니다.
 
 ### Switch
 
@@ -251,20 +256,28 @@ native props 또는 외부 폼 상태가 소유합니다.
     checked={enabled}
     onChange={(event) => setEnabled(event.currentTarget.checked)}
   />
+  <Switch.Track className={styles.track}>
+    <Switch.Thumb className={styles.thumb} />
+  </Switch.Track>
   알림 받기
 </Label>
 ```
 
+`Switch.Track`과 `Switch.Thumb`도 상태 없는 span이며 input의 `:checked`,
+`:disabled`, `:focus-visible` 상태를 sibling selector로 표현합니다.
+
 ### RadioGroup
 
 `RadioGroup.Root`, `RadioGroup.Legend`, `RadioGroup.Item`은 각각
-`<fieldset>`, `<legend>`, `<input type="radio">`를 기반으로 합니다.
+`<fieldset>`, `<legend>`, `<input type="radio">`를 기반으로 하며
+`RadioGroup.Indicator`는 선택 표시용 span입니다.
 
 ```tsx
 <RadioGroup.Root name="contact" required>
   <RadioGroup.Legend>연락 방법</RadioGroup.Legend>
   <Label>
     <RadioGroup.Item value="email" defaultChecked />
+    <RadioGroup.Indicator className={styles.indicator} />
     이메일
   </Label>
   <Label>
@@ -319,7 +332,7 @@ Root의 `name`, `disabled`, `required`는 모든 Item에 전달됩니다. 선택
 
 ```tsx
 <button type="button">
-  <Icon name="arrow_range" aria-hidden />
+  <ArrowRangeIcon aria-hidden />
   <VisuallyHidden>새로고침</VisuallyHidden>
 </button>
 ```
@@ -795,20 +808,38 @@ hook이 반환한 setter는 TreeView 밖의 breadcrumb, toolbar, inspector에서
 
 ## Icon
 
-생성된 SVG registry에서 아이콘을 선택해 렌더링합니다.
+원본 SVG는 `@uode/assets/icons`에 두고 React 컴포넌트는 생성물로 제공합니다.
+일반 화면에서는 아이콘별 subpath를 import해 사용한 아이콘만 번들에 넣습니다.
 
 ```tsx
-<Icon name="react" width={20} height={20} aria-hidden />
+import ReactIcon from "@uode/base-ui-react/icons/react";
+
+<ReactIcon width={20} height={20} aria-hidden />
 ```
 
-`IconProps`는 `React.SVGProps<SVGSVGElement>`와 `name`으로 구성되므로 SVG의
-기본 props를 전달할 수 있습니다.
+각 컴포넌트는 `React.SVGProps<SVGSVGElement>`를 받습니다. 단색 SVG는
+`currentColor`를 사용하고 다색 SVG는 원래 색을 보존하면서
+`--icon-color-1`, `--icon-color-2` 순서의 CSS variable로 palette를 덮어쓸
+수 있습니다. `filter`는 SVG root의 `style` 또는 className으로 적용합니다.
+내부 도형에는 `data-icon-part`가 있으므로 stroke 기반 SVG animation도 CSS로
+작성할 수 있으며 `prefers-reduced-motion` 처리는 소비처가 함께 제공합니다.
+
+런타임 문자열로 아이콘을 선택해야 할 때만 전체 아이콘을 포함하는 registry를
+명시적으로 import합니다.
+
+```tsx
+import {
+  Icon,
+} from "@uode/base-ui-react/icons/registry";
+
+<Icon name="arrow_range" aria-hidden />
+```
 
 아이콘만 있는 버튼에는 버튼 자체에 accessible name을 제공합니다.
 
 ```tsx
 <button type="button" aria-label="새로고침">
-  <Icon name="arrow_range" aria-hidden />
+  <ArrowRangeIcon aria-hidden />
 </button>
 ```
 

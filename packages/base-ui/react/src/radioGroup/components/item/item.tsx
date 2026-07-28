@@ -9,6 +9,7 @@ export const RadioGroupItem = (props: RadioGroupItemProps) => {
     <input
       {...rest}
       type="radio"
+      data-part="control"
       name={context.name}
       disabled={context.disabled || disabled}
       required={requiredProp ?? context.required}

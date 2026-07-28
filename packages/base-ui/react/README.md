@@ -15,7 +15,7 @@ import "@uode/base-ui-react/style.css";
 - `Accordion.Root`, `Accordion.Item`, `Accordion.Trigger`, `Accordion.Content`, `Accordion.useState`
 - `TreeView.Root`, `TreeView.Item`, `TreeView.Group`, `TreeView.useState`
 - `Popover.Root`, `Popover.Host`, `Popover.Backdrop`, `Popover.useState`, `Popover.useController`
-- `Icon`
+- `Icon` 개별 subpath와 opt-in registry
 - `useTextBlockHeight`, `useTextBlockLines`
 
 모든 ref는 React 19의 일반 `ref` prop으로 전달합니다.
@@ -40,6 +40,7 @@ const [pressed, setPressed] = React.useState(false);
 
 - TreeView는 단일 선택과 Arrow, Home, End, Enter, Space 키보드 탐색을 제공합니다.
 - Accordion Trigger와 Content의 `aria-controls`, `aria-expanded`, `aria-labelledby`는 자동 연결됩니다.
+- 아이콘은 `@uode/base-ui-react/icons/<name>` 개별 경로가 기본이며 문자열 registry는 `icons/registry`에서만 제공합니다.
 - Icon은 기본적으로 장식용입니다. 의미가 있는 아이콘은 감싸는 컨트롤에 accessible name을 제공합니다.
 
 ## Popover의 범위

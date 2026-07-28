@@ -1,7 +1,7 @@
 # Base UI 컴포넌트 계획
 
-- 상태: P1 폼 및 로딩 primitive 구현 완료
-- 최종 수정: 2026-07-27
+- 상태: P1·P1.5 구현 완료
+- 최종 수정: 2026-07-28
 - 대상: `packages/base-ui/core`, `packages/base-ui/react`, `apps/desktop`
 
 ## 목차
@@ -49,6 +49,8 @@ HTML 요소가 존재한다는 이유만으로 Base UI 컴포넌트 후보에서
 - 테이블의 정렬, 필터링, 페이지네이션, 선택 상태는 TanStack Table이 담당한다.
 - `@uode/base-ui-core`는 React와 DOM에 의존하지 않는다.
 - `@uode/base-ui-react`는 DOM, ARIA, focus, keyboard, Context 연결을 담당한다.
+- 원본 SVG 같은 공유 source asset은 `@uode/assets`에 두고, 생성된 React
+  컴포넌트만 `@uode/base-ui-react`에 둔다.
 - 스타일은 소비처의 CSS Module을 기본으로 하고 패키지 스타일은 최소화한다.
 
 TanStack Form이나 TanStack Table을 감싸서 자체 상태 엔진을 만들지 않는다.
@@ -117,6 +119,19 @@ compound component 조합을 사용한다.
 - Next.js의 Server Component에서는 직렬화 가능한 상태만 내려주고 이벤트
   핸들러를 사용하는 조합은 Client Component에서 작성한다.
 
+### 6. asset과 번들 경계
+
+- 원본 asset과 런타임 컴포넌트를 분리한다. SVG 원본은 생성 도구의 입력이지
+  애플리케이션의 런타임 의존성이 아니다.
+- 아이콘은 파일별 생성물과 개별 import 경로를 기본으로 제공한다. 한 아이콘을
+  사용하기 위해 전체 registry를 import하게 만들지 않는다.
+- 문자열 `name`으로 찾는 동적 registry는 모든 아이콘을 포함해야 하므로
+  명시적인 opt-in API로만 유지한다.
+- 패키지 루트의 단일 bundle이 개별 아이콘까지 합치지 않도록 아이콘 subpath
+  export 또는 preserve-modules 방식의 build를 사용한다.
+- 실제 소비 앱의 production build에서 사용한 아이콘만 포함되는지 출력
+  chunk로 검증한다.
+
 ## 현재 제공 컴포넌트
 
 | 컴포넌트 | 책임 | 상태 |
@@ -125,7 +140,7 @@ compound component 조합을 사용한다.
 | Accordion | 단일/다중 확장 영역 | 제공 |
 | Popover | replace/stack 방식 패널 surface | 제공 |
 | TreeView | 단일 선택 트리와 키보드 탐색 | 제공 |
-| Icon | SVG 아이콘 렌더링 | 제공 |
+| Icon | SVG 아이콘 렌더링 | 제공, 색상·animation·개별 entry 보완 예정 |
 | Pretext | 텍스트 블록 높이와 줄 수 측정 | 제공 |
 | Label, Input, Textarea | native 폼 요소의 props와 ref 전달 | 제공 |
 | Field | label, description, error와 control의 접근성 연결 | 제공 |
@@ -147,14 +162,67 @@ compound component 조합을 사용한다.
 | 1 | Label, Input, Textarea | 거의 모든 폼에서 반복되고 TanStack Form과 직접 연결됨 | 실제 `<label>`, `<input>`, `<textarea>`의 props와 ref를 그대로 전달하며 값 상태를 소유하지 않음 |
 | 2 | Field | label, description, error와 control의 접근성 연결 | form value·validation 없이 id, `aria-describedby`, `aria-invalid` 조합만 담당 |
 | 3 | Skeleton | 페이지, 목록, 카드의 로딩 레이아웃을 일관되게 표현 | 내부 loading 상태 없이 HTML props와 shape/style hook 제공, animation은 `@uode/styles`에서 조절 |
-| 4 | Checkbox, RadioGroup | 선택형 폼의 native semantics와 스타일 지점 제공 | native checkbox/radio, `fieldset`, `legend` 기반이며 checked 상태는 소비처가 소유 |
-| 5 | Switch | boolean 설정 UI에서 반복 사용 | `<input type="checkbox" role="switch">` 기반, 별도 boolean 상태 엔진 없음 |
+| 4 | Checkbox, RadioGroup | 선택형 폼의 native semantics와 스타일 지점 제공 | native checkbox/radio, `fieldset`, `legend` 기반이며 checked 상태는 소비처가 소유. indicator part 제공 |
+| 5 | Switch | boolean 설정 UI에서 반복 사용 | `<input type="checkbox" role="switch">` 기반, 별도 boolean 상태 엔진 없이 track/thumb 조합 제공 |
 | 6 | NativeSelect | 기본 선택 UI에 일관된 props·ref·스타일 계약 제공 | 실제 `<select>`, `<option>`, `<optgroup>` 기반 |
 | 7 | VisuallyHidden | 아이콘 컨트롤과 상태 설명에 반복되는 접근성 텍스트 | 스타일과 HTML props 전달만 제공 |
 
 초기 폼 컴포넌트는 `@uode/base-ui-react`가 TanStack Form을 import하지 않는다.
 TanStack Form의 `value`, `checked`, `onChange`, `onBlur`, validation 결과를 native
 props와 Field의 명시적인 상태 props에 주입한다.
+
+### P1.5. 기존 컴포넌트 보완 (구현 완료)
+
+새 interaction primitive를 늘리기 전에 현재 소비 API의 표현력과 bundle 경계를
+먼저 보완한다.
+
+| 순서 | 대상 | 보완 범위 |
+|---|---|---|
+| 1 | Icon asset 경계 | 원본 SVG를 `packages/assets/icons`로 이동하고 생성 스크립트의 build-time 입력으로만 사용 |
+| 2 | Icon bundle | 파일별 생성물과 subpath export를 제공하고 동적 registry는 opt-in으로 분리 |
+| 3 | Icon 색상 | 단색은 `currentColor`, 다색은 원본 보존 또는 명시적인 CSS palette variable을 사용 |
+| 4 | Icon animation/filter | root transform·opacity·filter와 path별 stroke animation 지점을 구분하고 reduced-motion을 지원 |
+| 5 | Checkbox·RadioGroup·Switch | native input을 상태·폼·접근성의 원본으로 유지하면서 indicator, track, thumb 등 커스텀 외형 조합 지점 제공 |
+| 6 | Playground | Icon과 선택형 control의 기본형·커스텀형·경계 상태를 실제 상호작용 예시로 검증 |
+
+#### Icon 색상과 효과 원칙
+
+- 생성 시 모든 색을 무조건 `currentColor`로 치환하지 않는다.
+- 단색 아이콘은 fill 또는 stroke를 `currentColor`로 정규화한다.
+- gradient, 여러 fill/stroke 색, mask, filter를 포함한 다색 아이콘은 원본을
+  보존한다. 테마 변경이 필요한 색은 `--icon-color-1`,
+  `--icon-color-2` 순서의 CSS variable palette로 덮어쓴다.
+- CSS `filter`는 root SVG 전체에 적용할 수 있지만 다색 아이콘의 각 색을
+  의미 있게 교체하는 API로 취급하지 않는다.
+- stroke drawing은 stroke path와 path length가 있는 아이콘에서만 가능하다.
+  모든 아이콘에 동작하는 `animated` boolean prop을 만들지 않고, 생성된
+  path의 `data-icon-part`와 className/CSS animation을 조합한다.
+- gradient, mask, filter의 document-global id가 여러 Icon instance 사이에서
+  충돌하지 않도록 생성 단계에서 고유 id 전략을 적용한다.
+- Icon Playground에는 크기와 단색 변경, 다색·gradient 보존, CSS palette
+  override, root filter, stroke animation, reduced-motion, 같은 아이콘의 반복
+  instance를 각각 독립 예시로 제공한다.
+
+#### 선택형 form control 원칙
+
+- Checkbox, RadioGroup, Switch의 값, checked, required, disabled, FormData,
+  keyboard 동작은 계속 native input이 담당한다.
+- 기본 브라우저 외형을 강제하지 않는다. native input을 시각적으로 숨기거나
+  `appearance: none`으로 스타일할 수 있고, indicator·track·thumb를 children
+  또는 compound part로 조합할 수 있어야 한다.
+- 커스텀 외형을 위해 checked 상태 store나 synthetic hidden input을 별도로
+  만들지 않는다. CSS `:checked`, `:indeterminate`, `:disabled`,
+  `:focus-visible`과 인접 part를 우선 사용한다.
+- Input과 Textarea는 props/ref 전달 primitive로 유지한다. 날짜 grid,
+  범위 선택, 월 이동처럼 native input 밖의 동작은 별도 Calendar/DatePicker가
+  담당한다.
+- Checkbox, RadioGroup, Switch Playground에는 native 기본형과 custom
+  indicator/track/thumb 조합을 함께 제공하고 checked, unchecked,
+  indeterminate, disabled, required, focus-visible 상태와 FormData 제출을
+  확인한다.
+- Calendar/DatePicker 구현 시 native date input과 custom calendar를 나란히
+  제공하고 날짜 선택, 월 이동, keyboard 탐색, disabled date, 단일·범위 선택을
+  요구 범위에 맞게 검증한다.
 
 ### P2. interaction 기반 primitive
 
@@ -189,7 +257,7 @@ Dropdown Menu는 별도 상태 엔진으로 만들지 않고 Menu와 trigger/pos
 | Custom Select | option 표현과 검색이 필요한 선택기 | native select로 부족할 때 |
 | Command | 검색 가능한 명령 collection | Menu/Combobox로 표현하기 어려울 때 |
 | ResizablePanel | 노트 탐색기와 편집기 크기 조정 | 실제 레이아웃 요구 확정 후 |
-| Calendar/DatePicker | 복합 날짜 규칙과 범위 선택 | native date input으로 부족할 때 |
+| Calendar/DatePicker | 일관된 custom calendar UI, 복합 날짜 규칙과 범위 선택 | native date input은 단순 입력에 유지하고 custom UI 요구가 있으면 Calendar와 trigger/input 조합인 DatePicker를 별도로 구현 |
 | Pagination | 서버/클라이언트 목록 탐색 UI | 상태 없이 링크·버튼 조합으로 제공 |
 
 ### P5. 조합형 또는 제품 전용
@@ -207,8 +275,8 @@ OTP, DropZone, Attachment, Message 계열은 atomic primitive가 아니거나 �
 | 컴포넌트 범주 | 실제 기반 | Base UI가 추가할 수 있는 범위 |
 |---|---|---|
 | Input, Textarea, Label | `<input>`, `<textarea>`, `<label>` | props/ref 전달, 접근성·스타일 계약 |
-| Checkbox, RadioGroup | native checkbox/radio와 `<fieldset>`, `<legend>` | 조합 구조와 상태 표현용 data attribute |
-| Switch | `<input type="checkbox" role="switch">` | native checked 전달과 스타일 지점 |
+| Checkbox, RadioGroup | native checkbox/radio와 `<fieldset>`, `<legend>` | native 상태를 유지하는 indicator와 custom control 조합 |
+| Switch | `<input type="checkbox" role="switch">` | native checked를 유지하는 track/thumb 조합 |
 | Native Select | `<select>`, `<option>`, `<optgroup>` | props/ref 전달과 compound export |
 | Skeleton, Spinner | 일반 semantic HTML과 CSS animation | shape/style hook과 접근성 사용 규칙 |
 | Table | `<table>`, `<thead>`, `<tbody>`, `<th>`, `<td>` | 제품 스타일 요구가 확인되기 전에는 별도 상태 엔진 없음 |
@@ -280,6 +348,8 @@ treeView/
 - core의 순수 상태 전이에 테스트가 있다.
 - 변경 패키지의 type check와 build가 통과한다.
 - 상호작용 컴포넌트는 Playground에서 mouse와 keyboard로 확인한다.
+- 공개 컴포넌트 또는 기존 컴포넌트 보완에는 Playground의 무스타일 기본형,
+  커스텀형, disabled·focus 등 주요 경계 상태 예시가 함께 추가된다.
 - HTML 기본 기능이나 TanStack Form/Table의 상태 엔진을 중복 구현하지 않는다.
 
 ## 변경 기록
@@ -300,3 +370,14 @@ treeView/
   `@uode/validation`을 조합한 validation 예시를 추가.
 - 2026-07-27: 동적 `[component]` Form Playground를 제거하고 컴포넌트별
   정적 route가 각자의 page, example logic, style을 소유하도록 co-location.
+- 2026-07-28: Icon 원본을 `packages/assets`로 분리하고 단색·다색·animation,
+  SVG id, 개별 entry와 registry의 bundle 경계를 보완하는 계획을 추가.
+- 2026-07-28: Checkbox, RadioGroup, Switch는 native 상태를 유지하면서
+  커스텀 indicator/track/thumb를 조합하도록 보완하고, custom DatePicker를
+  native date input과 별도 컴포넌트로 계획.
+- 2026-07-28: Icon과 선택형 form control 보완 및 향후 Calendar/DatePicker의
+  기본형·커스텀형·경계 상태를 Playground 필수 검증 범위로 추가.
+- 2026-07-28: P1.5를 구현. Icon 원본과 React 생성물을 분리하고 개별 subpath,
+  opt-in registry, 단색·다색 palette, 고유 SVG id와 animation part를 제공.
+  Checkbox, RadioGroup, Switch에는 native control과 함께 쓰는
+  Indicator·Track·Thumb를 추가하고 Playground에서 FormData까지 검증.

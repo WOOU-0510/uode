@@ -89,10 +89,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "catalog:tooling",
-        "@svgr/core": "catalog:ui",
-        "@svgr/plugin-jsx": "catalog:ui",
         "@tsdown/css": "catalog:bundler",
-        "@types/bun": "catalog:tooling",
         "@types/react": "catalog:web",
         "@types/react-dom": "catalog:web",
         "lightningcss": "catalog:web",
@@ -111,6 +108,12 @@
       "version": "0.1.0",
       "dependencies": {
         "@clack/prompts": "catalog:tooling",
+      },
+      "devDependencies": {
+        "@biomejs/biome": "catalog:tooling",
+        "@svgr/core": "catalog:ui",
+        "@svgr/plugin-jsx": "catalog:ui",
+        "@types/bun": "catalog:tooling",
       },
     },
     "packages/config": {

@@ -8,7 +8,9 @@ export type CheckboxProps = Omit<
   readonly indeterminate?: boolean;
 };
 
-export const Checkbox = (props: CheckboxProps) => {
+export type CheckboxIndicatorProps = React.ComponentPropsWithRef<"span">;
+
+const CheckboxControl = (props: CheckboxProps) => {
   const {
     "aria-checked": ariaChecked,
     indeterminate = false,
@@ -30,7 +32,21 @@ export const Checkbox = (props: CheckboxProps) => {
       {...rest}
       ref={setRef}
       type="checkbox"
+      data-part="control"
       aria-checked={indeterminate ? "mixed" : ariaChecked}
     />
   );
 };
+
+const CheckboxIndicator = (props: CheckboxIndicatorProps) => {
+  const { ...rest } = props;
+  return <span {...rest} aria-hidden="true" data-part="indicator" />;
+};
+
+export type CheckboxCompound = typeof CheckboxControl & {
+  readonly Indicator: typeof CheckboxIndicator;
+};
+
+export const Checkbox: CheckboxCompound = Object.assign(CheckboxControl, {
+  Indicator: CheckboxIndicator,
+});

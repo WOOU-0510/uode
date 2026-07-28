@@ -1,6 +1,6 @@
 "use client";
 
-import { Icon, ICON_NAMES } from "@uode/base-ui-react";
+import { Icon, ICON_NAMES } from "@uode/base-ui-react/icons/registry";
 import { useIconPlaygroundShallowPick } from "../../model";
 import styles from "./IconPlaygroundGrid.module.scss";
 

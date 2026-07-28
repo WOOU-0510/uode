@@ -13,6 +13,7 @@ const SwitchPage = (props: SwitchPageProps) => {
     notifications: true,
     compact: false,
   });
+  const [submitted, setSubmitted] = React.useState("제출 전");
   const handleNotificationsChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -45,32 +46,72 @@ const SwitchPage = (props: SwitchPageProps) => {
 
       <ExampleSection
         title="커스텀 형태"
-        description="CSS로 track과 thumb를 그리고 controlled 상태를 설정 행에 연결합니다."
+        description="native switch를 상태와 FormData 원본으로 두고 Track과 Thumb만 CSS로 표현합니다."
       >
-        <div className={styles.settingsCard}>
-          <Label className={styles.settingRow}>
-            <span>
-              <strong>데스크톱 알림</strong>
-              <small>새 댓글과 멘션을 바로 알려줍니다.</small>
-            </span>
-            <Switch
-              className={styles.switchControl}
-              checked={settings.notifications}
-              onChange={handleNotificationsChange}
-            />
-          </Label>
-          <Label className={styles.settingRow}>
-            <span>
-              <strong>컴팩트 모드</strong>
-              <small>목록의 세로 간격을 줄입니다.</small>
-            </span>
-            <Switch
-              className={styles.switchControl}
-              checked={settings.compact}
-              onChange={handleCompactChange}
-            />
-          </Label>
-        </div>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const values = [...new FormData(event.currentTarget).keys()];
+            setSubmitted(values.join(", ") || "켜진 설정 없음");
+          }}
+        >
+          <div className={styles.settingsCard}>
+            <Label className={styles.settingRow}>
+              <span>
+                <strong>데스크톱 알림</strong>
+                <small>새 댓글과 멘션을 바로 알려줍니다.</small>
+              </span>
+              <span className={styles.switchVisual}>
+                <Switch
+                  className={styles.hiddenControl}
+                  name="notifications"
+                  checked={settings.notifications}
+                  onChange={handleNotificationsChange}
+                />
+                <Switch.Track className={styles.track}>
+                  <Switch.Thumb className={styles.thumb} />
+                </Switch.Track>
+              </span>
+            </Label>
+            <Label className={styles.settingRow}>
+              <span>
+                <strong>컴팩트 모드</strong>
+                <small>목록의 세로 간격을 줄입니다.</small>
+              </span>
+              <span className={styles.switchVisual}>
+                <Switch
+                  className={styles.hiddenControl}
+                  name="compact"
+                  checked={settings.compact}
+                  onChange={handleCompactChange}
+                />
+                <Switch.Track className={styles.track}>
+                  <Switch.Thumb className={styles.thumb} />
+                </Switch.Track>
+              </span>
+            </Label>
+            <Label className={styles.settingRow} data-disabled>
+              <span>
+                <strong>실험 기능</strong>
+                <small>disabled switch는 제출 값에서도 제외됩니다.</small>
+              </span>
+              <span className={styles.switchVisual}>
+                <Switch
+                  className={styles.hiddenControl}
+                  name="experimental"
+                  disabled
+                />
+                <Switch.Track className={styles.track}>
+                  <Switch.Thumb className={styles.thumb} />
+                </Switch.Track>
+              </span>
+            </Label>
+          </div>
+          <div className={styles.formResult}>
+            <button type="submit">FormData 확인</button>
+            <output>{submitted}</output>
+          </div>
+        </form>
       </ExampleSection>
     </ExamplePage>
   );

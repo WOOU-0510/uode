@@ -6,7 +6,11 @@ export const rootCommands = [
   { value: "start", label: "start", hint: "실행할 app 선택" },
   { value: "lint", label: "lint", hint: "기본/범위/직접 입력" },
   { value: "format", label: "format", hint: "기본/경로/직접 입력" },
-  { value: "ic:g", label: "icon create", hint: "root ic:g" },
+  {
+    value: "icon:create",
+    label: "icon create",
+    hint: "@uode/cli icon:create",
+  },
   { value: "t:g", label: "type gen", hint: "root t:g" },
 ] as const satisfies readonly CommandOption[];
 

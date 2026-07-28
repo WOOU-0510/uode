@@ -11,7 +11,6 @@ export * from "./checkbox";
 export type * from "./checkbox";
 export * from "./field";
 export type * from "./field";
-export * from "./icons";
 export * from "./input";
 export type * from "./input";
 export * from "./label";

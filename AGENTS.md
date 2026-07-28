@@ -7,6 +7,8 @@ Before making changes or giving architectural guidance, always read:
 
 ## Working agreements
 
+- This personal project is permanently `[no-report]`. Always use
+  `<!-- weing-report:none -->`; do not request or emit Weing brief/full reports.
 - Do not use OMO tools, skills, agents, or planning modes unless the user
   explicitly asks to enable OMO again. Prefer direct repository inspection and
   the smallest relevant tool surface.
@@ -17,6 +19,22 @@ Before making changes or giving architectural guidance, always read:
 - When a React event value is needed inside a functional state updater,
   promise, timer, or other deferred callback, read the required
   `event.currentTarget` values synchronously first.
+
+## Desktop app manual QA
+
+- For `apps/desktop` UI, Tauri IPC, window APIs, plugins, WebView behavior, and
+  other desktop-only behavior, use the `computer-use` skill against the user's
+  already-running Tauri desktop app as the primary manual QA surface.
+- Inspect the real Tauri window through its accessibility tree and screenshots,
+  then exercise the relevant controls with safe clicks, keyboard input, scrolling,
+  or other supported desktop actions.
+- Use Playwright only as a supplement for browser-only DOM, accessibility, or
+  pure Next.js behavior that does not depend on Tauri.
+- Never claim that Tauri functionality was verified from a Playwright session or
+  a standalone Next.js dev-server page. If the Tauri window is unavailable,
+  report the desktop QA as unverified instead.
+- Do not close, restart, or replace the user's running Tauri app while testing.
+  Stop only desktop processes started by the agent.
 
 When creating git commits, write commit messages in **Korean**.
 

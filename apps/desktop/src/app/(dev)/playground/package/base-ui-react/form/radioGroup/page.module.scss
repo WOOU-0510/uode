@@ -13,6 +13,7 @@
 }
 
 .choiceCard {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
@@ -27,7 +28,12 @@
     background: color-mix(in srgb, #5170d7 9%, var(--playground-card));
   }
 
-  > span {
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  > span:last-child {
     display: grid;
     gap: 0.2rem;
   }
@@ -39,5 +45,72 @@
   small {
     color: var(--playground-muted);
     font-size: 0.72rem;
+  }
+}
+
+.hiddenControl {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.indicator {
+  display: grid;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #7d8799;
+  border-radius: 50%;
+  background: var(--playground-card);
+
+  &::after {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #5170d7;
+    content: "";
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+      opacity 120ms ease,
+      transform 120ms ease;
+  }
+}
+
+.hiddenControl:checked + .indicator {
+  border-color: #5170d7;
+}
+
+.hiddenControl:checked + .indicator::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hiddenControl:focus-visible + .indicator {
+  outline: 3px solid color-mix(in srgb, #5170d7 28%, transparent);
+  outline-offset: 2px;
+}
+
+.formResult {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.7rem;
+
+  button {
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--playground-border);
+    border-radius: 0.4rem;
+    background: var(--playground-card);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  output {
+    color: var(--playground-muted);
+    font-size: 0.75rem;
   }
 }

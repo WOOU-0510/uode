@@ -3,7 +3,7 @@
 import type * as React from "react";
 import cn from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Icon } from "@uode/base-ui-react";
+import ArrowRangeIcon from "@uode/base-ui-react/icons/arrow_range";
 import { PlaygroundSidebar } from "../PlaygroundSidebar";
 import styles from "./PlaygroundShell.module.scss";
 
@@ -233,8 +233,7 @@ export const PlaygroundShell = (props: PlaygroundShellProps) => {
         <span className={styles.resizeGutterLine} aria-hidden />
         <span className={styles.resizeHandle} aria-hidden>
           <span className={styles.resizeHandleCircle}>
-            <Icon
-              name="arrow_range"
+            <ArrowRangeIcon
               className={styles.resizeHandleIcon}
               style={{ width: 18, height: 18 }}
             />

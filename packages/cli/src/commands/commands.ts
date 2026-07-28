@@ -58,11 +58,11 @@ export const buildCommands = async (
         },
       ];
     }
-    case "ic:g":
+    case "icon:create":
       return [
         {
           bin: "bun",
-          args: ["x", "turbo", "run", "ic:g", "--filter=@uode/base-ui-react"],
+          args: ["run", "--filter", "@uode/cli", "icon:create"],
         },
       ];
     case "t:g":

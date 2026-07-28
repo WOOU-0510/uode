@@ -12,18 +12,25 @@
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
+    "./icons/registry": {
+      "types": "./dist/icons/registry.d.mts",
+      "import": "./dist/icons/registry.mjs",
+      "default": "./dist/icons/registry.mjs"
+    },
+    "./icons/*": {
+      "types": "./dist/icons/*.d.mts",
+      "import": "./dist/icons/*.mjs",
+      "default": "./dist/icons/*.mjs"
+    },
     "./style.css": "./dist/style.css"
   },
   "files": [
-    "assets",
     "dist",
-    "scripts",
     "src"
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "bun run clean && tsdown",
-    "ic:g": "bun run ./scripts/svgr-generate-icons.ts"
+    "build": "bun run clean && tsdown"
   },
   "dependencies": {
     "@uode/base-ui-core": "workspace:*"
@@ -35,10 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:tooling",
-    "@svgr/core": "catalog:ui",
-    "@svgr/plugin-jsx": "catalog:ui",
     "@tsdown/css": "catalog:bundler",
-    "@types/bun": "catalog:tooling",
     "@types/react": "catalog:web",
     "@types/react-dom": "catalog:web",
     "lightningcss": "catalog:web",

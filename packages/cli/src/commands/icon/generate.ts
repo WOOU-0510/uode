@@ -14,6 +14,8 @@ type IconMeta = {
   relPathNoExt: string;
 };
 
+const REPO_ROOT = path.resolve(import.meta.dir, "..", "..", "..", "..", "..");
+
 const getFlagValue = (argv: string[], flag: string): string | undefined => {
   const idx = argv.indexOf(flag);
   if (idx === -1) return undefined;
@@ -55,32 +57,97 @@ const toComponentName = (relNoExt: string): string => {
   return `${pascal}Icon`;
 };
 
+const ICON_PART_ELEMENTS = [
+  "circle",
+  "ellipse",
+  "line",
+  "path",
+  "polygon",
+  "polyline",
+  "rect",
+] as const;
+
+const getSvgPaints = (svg: string): string[] => {
+  const visibleSvg = svg.replace(/<mask\b[\s\S]*?<\/mask>/gi, "");
+  const paints = new Map<string, string>();
+  const patterns = [
+    /(?:fill|stroke|stop-color)=["']([^"']+)["']/gi,
+    /(?:fill|stroke|stop-color)\s*:\s*([^;"']+)/gi,
+  ];
+
+  for (const pattern of patterns) {
+    for (const match of visibleSvg.matchAll(pattern)) {
+      const paint = match[1]?.trim();
+      if (
+        paint === undefined ||
+        /^(?:none|currentColor|transparent|url\()/i.test(paint)
+      ) {
+        continue;
+      }
+      paints.set(paint.toLowerCase(), paint);
+    }
+  }
+
+  return [...paints.values()];
+};
+
 const normalizeSvgColors = (svg: string): string => {
-  let out = svg;
-
-  out = out.replace(/fill="(?!none\b)(?!url\()[^"]*"/gi, 'fill="currentColor"');
-  out = out.replace(/fill='(?!none\b)(?!url\()[^']*'/gi, "fill='currentColor'");
-  out = out.replace(
-    /stroke="(?!none\b)(?!url\()[^"]*"/gi,
-    'stroke="currentColor"',
+  const paints = getSvgPaints(svg);
+  const palette = new Map(
+    paints.map((paint, index) => [
+      paint.toLowerCase(),
+      paints.length === 1
+        ? "currentColor"
+        : `var(--icon-color-${index + 1}, ${paint})`,
+    ]),
   );
-  out = out.replace(
-    /stroke='(?!none\b)(?!url\()[^']*'/gi,
-    "stroke='currentColor'",
+  const replacePaint = (paint: string): string =>
+    palette.get(paint.trim().toLowerCase()) ?? paint;
+
+  return svg
+    .replace(
+      /((?:fill|stroke|stop-color)=)(["'])([^"']+)\2/gi,
+      (match, prefix: string, quote: string, paint: string) => {
+        const replacement = replacePaint(paint);
+        return replacement === paint
+          ? match
+          : `${prefix}${quote}${replacement}${quote}`;
+      },
+    )
+    .replace(
+      /((?:fill|stroke|stop-color)\s*:\s*)([^;"']+)/gi,
+      (match, prefix: string, paint: string) => {
+        const replacement = replacePaint(paint);
+        return replacement === paint ? match : `${prefix}${replacement}`;
+      },
+    );
+};
+
+const addIconParts = (svg: string): string =>
+  svg.replace(
+    new RegExp(`<(${ICON_PART_ELEMENTS.join("|")})(?=[\\s>])`, "gi"),
+    '<$1 data-icon-part="$1"',
   );
 
-  out = out.replace(/fill:\s*(?!none\b)(?!url\()[^;]+/gi, "fill: currentColor");
-  out = out.replace(
-    /stroke:\s*(?!none\b)(?!url\()[^;]+/gi,
-    "stroke: currentColor",
+const makeSvgIdsUnique = (source: string): string => {
+  const ids = [...source.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+  if (ids.length === 0) return source;
+
+  let output = source.replace(
+    "  const { ...svgProps } = props;\n  return",
+    "  const { ...svgProps } = props;\n  const uid = React.useId();\n  return",
   );
 
-  out = out.replace(
-    /stop-color:\s*(?!none\b)(?!url\()[^;]+/gi,
-    "stop-color: currentColor",
-  );
+  for (const id of ids) {
+    output = output
+      .replaceAll(`id="${id}"`, `id={\`\${uid}-${id}\`}`)
+      .replaceAll(`="url(#${id})"`, `={\`url(#\${uid}-${id})\`}`);
+  }
 
-  return out;
+  return output.replace(
+    'import type * as React from "react";',
+    'import * as React from "react";',
+  );
 };
 
 const walkSvgFiles = async (dir: string): Promise<string[]> => {
@@ -106,10 +173,19 @@ const main = async (): Promise<void> => {
   const argv = process.argv.slice(2);
 
   const inputDir =
-    getFlagValue(argv, "--input") ?? path.join("assets", "icons");
+    getFlagValue(argv, "--input") ??
+    path.join(REPO_ROOT, "packages", "assets", "icons");
   const outputDir =
     getFlagValue(argv, "--output") ??
-    path.join("src", "icons", "generated");
+    path.join(
+      REPO_ROOT,
+      "packages",
+      "base-ui",
+      "react",
+      "src",
+      "icons",
+      "generated",
+    );
 
   const args: GenerateIconsArgs = { inputDir, outputDir };
 
@@ -132,7 +208,7 @@ const main = async (): Promise<void> => {
 
   for (const svgFilePath of svgFiles) {
     const svgRaw = await fs.readFile(svgFilePath, "utf8");
-    const svgNormalized = normalizeSvgColors(svgRaw);
+    const svgNormalized = addIconParts(normalizeSvgColors(svgRaw));
 
     const relFromInput = path.relative(inputAbs, svgFilePath);
     const relNoExt = relFromInput.replace(/\.svg$/i, "");
@@ -162,20 +238,32 @@ const main = async (): Promise<void> => {
       { componentName },
     );
 
-    const componentSourceWithConvention = componentSource
-      .replace(
-        'import type { SVGProps } from "react";',
-        'import * as React from "react";',
-      )
-      .replace(/SVGProps<SVGSVGElement>/g, "React.SVGProps<SVGSVGElement>")
-      .replace(
-        new RegExp(
-          `const ${componentName} = \\(props: React\\.SVGProps<SVGSVGElement>\\) =>`,
-        ),
-        `type ${componentName}Props = React.SVGProps<SVGSVGElement>;\n\nconst ${componentName} = (props: ${componentName}Props) => {\n  const { ...svgProps } = props;\n  return`,
-      )
-      .replace(/\{\.\.\.props\}/g, "{...svgProps}")
-      .replace(/;\nexport default /, ";\n};\nexport default ");
+    const componentSourceWithConvention = makeSvgIdsUnique(
+      componentSource
+        .replace(
+          'import type { SVGProps } from "react";',
+          'import * as React from "react";',
+        )
+        .replace(/SVGProps<SVGSVGElement>/g, "React.SVGProps<SVGSVGElement>")
+        .replace(
+          new RegExp(
+            `const ${componentName} = \\(props: React\\.SVGProps<SVGSVGElement>\\) =>`,
+          ),
+          `type ${componentName}Props = React.SVGProps<SVGSVGElement>;\n\nconst ${componentName} = (props: ${componentName}Props) => {\n  const { ...svgProps } = props;\n  return`,
+        )
+        .replace(/\{\.\.\.props\}/g, "{...svgProps}")
+        .replace(/;\nexport default /, ";\n};\nexport default "),
+    );
+
+    if (/\bid="[^"]+"/.test(componentSourceWithConvention)) {
+      throw new Error(`고정 SVG id가 남아 있습니다: ${iconName}`);
+    }
+    if (
+      getSvgPaints(svgRaw).length > 1 &&
+      !componentSourceWithConvention.includes("--icon-color-1")
+    ) {
+      throw new Error(`다색 palette 변수가 생성되지 않았습니다: ${iconName}`);
+    }
 
     await fs.writeFile(outFilePath, componentSourceWithConvention, "utf8");
 
@@ -217,7 +305,7 @@ const main = async (): Promise<void> => {
     return `  ${key}: ${meta.componentName},`;
   });
 
-  const registrySource = `/* 이 파일은 packages/base-ui/react/scripts/svgr-generate-icons.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
+  const registrySource = `/* 이 파일은 packages/cli/src/commands/icon/generate.ts에 의해 자동 생성됩니다. 직접 수정하지 마세요. */
 
 import * as React from "react";
 

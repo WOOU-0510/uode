@@ -4,9 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "bun src/index.ts"
+    "start": "bun src/index.ts",
+    "icon:create": "bun src/commands/icon/generate.ts && biome check --write ../base-ui/react/src/icons/generated"
   },
   "dependencies": {
     "@clack/prompts": "catalog:tooling"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:tooling",
+    "@svgr/core": "catalog:ui",
+    "@svgr/plugin-jsx": "catalog:ui",
+    "@types/bun": "catalog:tooling"
   }
 }

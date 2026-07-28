@@ -16,6 +16,7 @@ type RadioGroupPageProps = Record<string, never>;
 const RadioGroupPage = (props: RadioGroupPageProps) => {
   const {} = props;
   const [plan, setPlan] = React.useState("team");
+  const [submitted, setSubmitted] = React.useState("제출 전");
 
   return (
     <ExamplePage
@@ -39,30 +40,47 @@ const RadioGroupPage = (props: RadioGroupPageProps) => {
 
       <ExampleSection
         title="커스텀 형태"
-        description="radio의 checked 상태를 카드와 동기화한 플랜 선택 예시입니다."
+        description="native radio를 유지한 채 Indicator와 카드만 교체하며 required와 FormData도 그대로 동작합니다."
       >
-        <RadioGroup.Root className={styles.choiceCards} name="plan">
-          <RadioGroup.Legend className={styles.legend}>
-            워크스페이스 플랜
-          </RadioGroup.Legend>
-          {PLANS.map(([value, title, description]) => (
-            <Label
-              className={styles.choiceCard}
-              data-selected={plan === value || undefined}
-              key={value}
-            >
-              <RadioGroup.Item
-                value={value}
-                checked={plan === value}
-                onChange={() => setPlan(value)}
-              />
-              <span>
-                <strong>{title}</strong>
-                <small>{description}</small>
-              </span>
-            </Label>
-          ))}
-        </RadioGroup.Root>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            setSubmitted(
+              String(new FormData(event.currentTarget).get("plan") ?? "없음"),
+            );
+          }}
+        >
+          <RadioGroup.Root className={styles.choiceCards} name="plan" required>
+            <RadioGroup.Legend className={styles.legend}>
+              워크스페이스 플랜
+            </RadioGroup.Legend>
+            {PLANS.map(([value, title, description], index) => (
+              <Label
+                className={styles.choiceCard}
+                data-selected={plan === value || undefined}
+                data-disabled={index === PLANS.length - 1 || undefined}
+                key={value}
+              >
+                <RadioGroup.Item
+                  className={styles.hiddenControl}
+                  value={value}
+                  checked={plan === value}
+                  disabled={index === PLANS.length - 1}
+                  onChange={() => setPlan(value)}
+                />
+                <RadioGroup.Indicator className={styles.indicator} />
+                <span>
+                  <strong>{title}</strong>
+                  <small>{description}</small>
+                </span>
+              </Label>
+            ))}
+          </RadioGroup.Root>
+          <div className={styles.formResult}>
+            <button type="submit">FormData 확인</button>
+            <output>plan: {submitted}</output>
+          </div>
+        </form>
       </ExampleSection>
     </ExamplePage>
   );

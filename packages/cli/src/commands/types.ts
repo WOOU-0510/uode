@@ -4,7 +4,7 @@ export type RootCommand =
   | "start"
   | "lint"
   | "format"
-  | "ic:g"
+  | "icon:create"
   | "t:g";
 
 export type AppName = "desktop" | "server";
